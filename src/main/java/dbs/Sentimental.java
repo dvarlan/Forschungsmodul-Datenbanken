@@ -15,6 +15,7 @@ import java.nio.file.Files;
 
 
 public class Sentimental {
+	static int filecount = 0;
 	public static Path split_Dir = null;											//Input directory of the original large Json Files
 	public static Path input_Dir = Paths.get("D:\\DBSProjekt\\Datein");						//Input directory of the Split up Json Files
 	public static Path result_Dir = Paths.get("D:\\DBSProjekt\\Ergebnis");					//Output directory of the result file containing only the text from negative sentiment tweets without metadata
@@ -27,7 +28,13 @@ public class Sentimental {
 	public static String veryneg = "sentiment: Very Negative):";	
 	public static Scanner scan;
 	 public static void main(String[] args) {
+		filecount++;
 		boolean error = false;
+		try {
+			Files.createDirectories(Paths.get(temp_Dir_1.toString() + "\\" + Integer.toString(filecount)));
+		} catch (IOException e8) {
+			e8.printStackTrace();
+		}
 		StanfordCoreNLP.OutputFormat.valueOf("JSON");									//settings für meine lokale maschine
 	    System.setProperty("hadoop.home.dir", "C:\\hadoop-3.3.1");
 	    SparkConf sparkConf = new SparkConf().setAppName("Hate_Speech_Filter");
@@ -61,7 +68,7 @@ public class Sentimental {
 		    filterdatei = sparkSession.sql("Select text from zu_pruefen_view , filter_liste WHERE zu_pruefen_view.text LIKE ('%' || ' ' || filter_liste.term || ' ' || '%') ");  //pruefen auf enthalten der Filterliste
 		    filterdatei.write().json(temp_Dir_1.toString() + "\\" + Integer.toString(i));			//Output der gefilterten Datei, auf welche die sentimentanalyse ausgeführt wird
 		    Path a = Paths.get(temp_Dir_1.toString() + "\\" + Integer.toString(i));
-		    Path b = Paths.get(temp_Dir_2.toString() + "\\" + Integer.toString(i));
+		    Path b = Paths.get(temp_Dir_2.toString() + "\\" + Integer.toString(i) + "\\");
 		    try {
 				Files.move(a,b);
 			} catch (IOException e) {
@@ -96,11 +103,10 @@ public class Sentimental {
 						System.exit(9);
 					}
 		    	}
-		    	else
+		    	else if(d.toString().contains(".json"))
 		    	{
 		    		try {
-		    			
-						Files.move(d, Paths.get(temp_Dir_2.toString() + "\\" + Integer.toString(i) + "\\Datei_" + Integer.toString(i) + "_" + Integer.toString(y) + ".json"),StandardCopyOption.REPLACE_EXISTING);
+						Files.move(d, Paths.get(temp_Dir_1.toString() + "\\" + Integer.toString(filecount) + "\\Datei_" + Integer.toString(i) + "_" + Integer.toString(y) + ".json"),StandardCopyOption.REPLACE_EXISTING);
 					} catch (IOException e1) {
 						e1.printStackTrace();
 						System.exit(9);
@@ -111,7 +117,7 @@ public class Sentimental {
 		    Properties props = new Properties();
 		    props.setProperty("annotators", "tokenize, ssplit, pos, parse,sentiment");
 		    StanfordCoreNLP Pipeline = new StanfordCoreNLP(props);
-		    Path e = Paths.get(temp_Dir_2.toString() + "\\" + Integer.toString(i) + "\\");
+		    Path e = Paths.get(temp_Dir_1.toString() + "\\" + Integer.toString(i) + "\\");
 	    	Stream<Path> e_stream = null;
 			try {
 				e_stream = Files.walk(e);
