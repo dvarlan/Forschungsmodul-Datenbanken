@@ -1,4 +1,4 @@
-package keineahnungiwasspark;
+package dbs;
 import java.util.Collections;
 import java.io.Serializable;
 import org.apache.spark.api.java.function.MapFunction;

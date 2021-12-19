@@ -1,4 +1,4 @@
-package keineahnungiwasspark;
+package dbs;
 import java.util.stream.*;
 import java.util.*;
 import org.apache.spark.api.java.function.MapFunction;
