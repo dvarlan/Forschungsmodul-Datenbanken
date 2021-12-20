@@ -1,4 +1,4 @@
-D:\\DBSProjektpackage dbs;
+D://DBSProjektpackage dbs;
 import java.util.stream.*;
 import java.util.*;
 import org.apache.spark.sql.*;
@@ -16,7 +16,7 @@ public class Sentimental {
 	public static Path input_Dir = Paths.get("/home/ubuntu/Datein/");						//Input directory of the Split up Json Files or any empty directory if Files are split automatically
 	public static Path result_Dir = Paths.get("/home/ubuntu/Ergebnis");					//Output directory of the result file containing only the text from negative sentiment tweets without metadata
 	public static Path temp_Dir_1 = Paths.get("/home/ubuntu/zu_pruefen");					//A temporary directory
-	public static Path filter_Dir = Paths.get("/home/ubuntu/FilterListen\\Ethnic.csv");	//The Input directory and file name of the list of words used as a filter
+	public static Path filter_Dir = Paths.get("/home/ubuntu/FilterListen//Ethnic.csv");	//The Input directory and file name of the list of words used as a filter
 	public static Path temp_Dir_3 = Paths.get("/home/ubuntu/Output");							//Temporary output path for the sentiment analysis, containing still both positive and negative tweets
 	public static Path negatives = Paths.get("/home/ubuntu/Negatives/");			//Finaler outputpfad in dem die Negativen Sentiment Dateien gespeichert werden
 	public static String neg = "sentiment: Negative):";
@@ -76,7 +76,7 @@ public class Sentimental {
     			Dataset<Row> zu_pruefen = sparkSession.read().option("inferSchema", true).json(input_path.toString()); //Pfad und name der einzulesenden Dateien hier "Datei(i).json"
     			zu_pruefen.createOrReplaceTempView("zu_pruefen_view");
     			filterdatei = sparkSession.sql("Select text from zu_pruefen_view , filter_liste WHERE zu_pruefen_view.text LIKE ('%' || ' ' || filter_liste.term || ' ' || '%') ");  //pruefen auf enthalten der Filterliste
-    			filterdatei.write().json(temp_Dir_1.toString() + "\\" + Integer.toString(y));			//Output der gefilterten Datei, auf welche die sentimentanalyse ausgeführt wird
+    			filterdatei.write().json(temp_Dir_1.toString() + "//" + Integer.toString(y));			//Output der gefilterten Datei, auf welche die sentimentanalyse ausgeführt wird
     			y++;	
     			}
     		try {
@@ -138,7 +138,7 @@ public class Sentimental {
 		    		try 
 		    		{
 						filecount++;
-						Files.move(d, Paths.get(temp_Dir_1.toString() + "\\" + Integer.toString((int)Math.ceil(filecount/4)) + "_Datei_" + Integer.toString(i) +".json"),StandardCopyOption.REPLACE_EXISTING);
+						Files.move(d, Paths.get(temp_Dir_1.toString() + "//" + Integer.toString((int)Math.ceil(filecount/4)) + "_Datei_" + Integer.toString(i) +".json"),StandardCopyOption.REPLACE_EXISTING);
 						i++;
 		    		} 
 		    		catch (IOException e1) 
@@ -206,7 +206,7 @@ public class Sentimental {
 		 		while(tweetscanner.hasNextLine()) 
 		 		{
 		 			try {
-						splitter = new FileWriter(input_Dir.toString() + "\\" + "Datei" + Integer.toString(x) + ".json");
+						splitter = new FileWriter(input_Dir.toString() + "//" + "Datei" + Integer.toString(x) + ".json");
 						i = 0;
 					} catch (IOException e) {
 						e.printStackTrace();
@@ -350,7 +350,7 @@ public class Sentimental {
 					 	try 
 					 	{
 					 		delete = false;
-					 		Files.move(g, Paths.get(negatives.toString() + "\\File_" + Integer.toString(i) + "_" + Integer.toString(z)));
+					 		Files.move(g, Paths.get(negatives.toString() + "//File_" + Integer.toString(i) + "_" + Integer.toString(z)));
 					 	} 
 					 	catch (IOException e2) 
 					 	{
@@ -384,7 +384,7 @@ public class Sentimental {
 		 FileWriter result = null;
 		 try 
 		 {
-			 result = new FileWriter(result_Dir.toString() + "\\Result.json");			//Pfad für das finale Ergebnis
+			 result = new FileWriter(result_Dir.toString() + "//Result.json");			//Pfad für das finale Ergebnis
 		 } 
 		 catch (IOException e5) 
 		 {
