@@ -26,12 +26,12 @@
 	<dependency>
   <groupId>edu.stanford.nlp</groupId>
   <artifactId>stanford-corenlp</artifactId>
-  <version>4.3.2</version>
+  <version>4.2.2</version>
 </dependency>
         <dependency>
             <groupId>edu.stanford.nlp</groupId>
             <artifactId>stanford-corenlp</artifactId>
-            <version>4.3.2</version>
+            <version>4.2.2</version>
             <classifier>models</classifier>
         </dependency>
   </dependencies>
