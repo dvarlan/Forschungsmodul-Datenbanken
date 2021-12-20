@@ -1,4 +1,4 @@
-D://DBSProjektpackage dbs;
+package dbs;
 import java.util.stream.*;
 import java.util.*;
 import org.apache.spark.sql.*;
