@@ -10,7 +10,7 @@ import java.nio.file.Files;
 import java.time.Instant;
 
 
-public Class Sentimental {
+public class Sentimental {
 	static int filecount = 0;
 	public static Path split_Dir = Paths.get("/home/ubuntu/Raw_Data/");											//Input directory of the original large Json Files
 	public static Path input_Dir = Paths.get("/home/ubuntu/Datein/");						//Input directory of the Split up Json Files or any empty directory if Files are split automatically
