@@ -23,7 +23,7 @@ public class Sentimental {
 	public static String veryneg = "sentiment: Very Negative):";	
 	public static Scanner scan;
 	public static long tweet_counter = 0;
-	public static int hate_tweets = 0;
+	public static long hate_tweets = 0;
 	
 	 public static void main(String[] args) {
 		long unixstart = Instant.now().getEpochSecond();
@@ -34,6 +34,7 @@ public class Sentimental {
 		move_negatives();
 		write_result();
 	    runtime(unixstart);
+	    System.out.print((int) tweet_counter * 100 / hate_tweets + "%");
 	 }
 
 
@@ -79,6 +80,11 @@ public class Sentimental {
     			filterdatei.write().json(temp_Dir_1.toString() + "\\" + Integer.toString(y));			//Output der gefilterten Datei, auf welche die sentimentanalyse ausgeführt wird
     			y++;	
     			}
+    		try {
+				Files.delete(input_path);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 	    }
 	 }
 	 
@@ -233,6 +239,14 @@ public class Sentimental {
 					e.printStackTrace();
 					System.out.println("Debug16");
 					System.exit(x);
+				}
+	 			try 
+	 			{
+					Files.delete(tweets);
+				} 
+	 			catch (IOException e) 
+	 			{
+					e.printStackTrace();
 				}
 	 		}
 	 	}
@@ -427,6 +441,13 @@ public class Sentimental {
 		
 				 }
 				 scan.close();
+				 try {
+					Files.delete(h);
+				 } 
+				 catch (IOException e) 
+				 {
+					e.printStackTrace();
+				 }
     		}
     	}	  
 	    try 
