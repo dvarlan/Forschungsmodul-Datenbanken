@@ -29,11 +29,11 @@ public class Sentimental {
 	
 	 public static void main(String[] args) {
 		long unixstart = Instant.now().getEpochSecond();
-		//split();
-		//cross_reference();
-		//meta_delete();
-		//analyse_sentiment();
-		//move_negatives();
+		split();
+		cross_reference();
+		meta_delete();
+		analyse_sentiment();
+		move_negatives();
 		write_result();
 	    runtime(unixstart);
 	 }
