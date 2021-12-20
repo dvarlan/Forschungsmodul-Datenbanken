@@ -48,8 +48,7 @@ public class Sentimental {
 
 	 public static void cross_reference()
 	 {
-		StanfordCoreNLP.OutputFormat.valueOf("JSON");									//settings für meine lokale maschine
-	    System.setProperty("hadoop.home.dir", "C:\\hadoop-3.3.1");
+	    StanfordCoreNLP.OutputFormat.valueOf("JSON");
 	    SparkConf sparkConf = new SparkConf().setAppName("Hate_Speech_Filter");
 	    sparkConf.setMaster("local[*]");
 	    System.setProperty("illegal-access", "permit");
