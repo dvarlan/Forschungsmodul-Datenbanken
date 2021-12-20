@@ -13,10 +13,9 @@ import java.time.Instant;
 public class Sentimental {
 	static int filecount = 0;
 	public static Path split_Dir = Paths.get("D:\\DBSProjekt\\Raw_Data\\");											//Input directory of the original large Json Files
-	public static Path input_Dir = Paths.get("D:\\DBSProjekt\\Datein\\");						//Input directory of the Split up Json Files
+	public static Path input_Dir = Paths.get("D:\\DBSProjekt\\Datein\\");						//Input directory of the Split up Json Files or any empty directory if Files are split automatically
 	public static Path result_Dir = Paths.get("D:\\DBSProjekt\\Ergebnis");					//Output directory of the result file containing only the text from negative sentiment tweets without metadata
 	public static Path temp_Dir_1 = Paths.get("D:\\DBSProjekt\\zu_pruefen");					//A temporary directory
-	public static Path temp_Dir_2 = Paths.get("D:\\DBSProjekt\\zu_pruefen_neu\\");			//Directory for the filtered files before the sentiment analysis 
 	public static Path filter_Dir = Paths.get("D:\\DBSProjekt\\FilterListen\\Ethnic.csv");	//The Input directory and file name of the list of words used as a filter
 	public static Path temp_Dir_3 = Paths.get("D:\\DBSProjekt\\Output");							//Temporary output path for the sentiment analysis, containing still both positive and negative tweets
 	public static Path negatives = Paths.get("D:\\DBSProjekt\\Negatives\\");			//Finaler outputpfad in dem die Negativen Sentiment Dateien gespeichert werden
@@ -24,7 +23,6 @@ public class Sentimental {
 	public static String veryneg = "sentiment: Very Negative):";	
 	public static Scanner scan;
 	public static long tweet_counter = 0;
-	public static int detected_tweets = 0;
 	public static int hate_tweets = 0;
 	
 	 public static void main(String[] args) {
