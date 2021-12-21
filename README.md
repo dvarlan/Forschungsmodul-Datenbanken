@@ -1,2 +1,2 @@
 # Forschungsmodul-Datenbanken
-Ein Repository für das Forschungsmodul Datenbanken und Informationssysteme WS 20/21.
+Ein Repository für das Forschungsmodul Datenbanken und Informationssysteme WS 21/22.
