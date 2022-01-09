@@ -3,7 +3,7 @@ import java.util.stream.*;
 import java.util.*;
 import org.apache.spark.sql.*;
 import org.apache.spark.SparkConf;
-import edu.stanford.nlp.pipeline.*;
+import edu.stanford.nlp.*;
 import java.io.*;
 import java.nio.file.*;
 import java.nio.file.Files;
