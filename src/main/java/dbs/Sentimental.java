@@ -3,7 +3,13 @@ import java.util.stream.*;
 import java.util.*;
 import org.apache.spark.sql.*;
 import org.apache.spark.SparkConf;
+import edu.stanford.nlp.coref.data.CorefChain;
+import edu.stanford.nlp.ling.*;
+import edu.stanford.nlp.ie.util.*;
 import edu.stanford.nlp.pipeline.*;
+import edu.stanford.nlp.semgraph.*;
+import edu.stanford.nlp.trees.*;
+import java.util.*;
 import java.io.*;
 import java.nio.file.*;
 import java.nio.file.Files;
@@ -48,7 +54,6 @@ public class Sentimental {
 
 	 public static void cross_reference()
 	 {
-	    StanfordCoreNLP.OutputFormat.valueOf("JSON");
 	    SparkConf sparkConf = new SparkConf().setAppName("Hate_Speech_Filter");
 	    sparkConf.setMaster("local[*]");
 	    System.setProperty("illegal-access", "permit");
@@ -78,11 +83,11 @@ public class Sentimental {
     			filterdatei = sparkSession.sql("Select text from zu_pruefen_view , filter_liste WHERE zu_pruefen_view.text LIKE ('%' || ' ' || filter_liste.term || ' ' || '%') ");  //pruefen auf enthalten der Filterliste
     			filterdatei.write().json(temp_Dir_1.toString() + "//" + Integer.toString(y));			//Output der gefilterten Datei, auf welche die sentimentanalyse ausgeführt wird
     			y++;	
-    			}
-    		try {
-				Files.delete(input_path);
-			} catch (IOException e) {
-				e.printStackTrace();
+    			try {
+					Files.delete(input_path);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 	    }
 	 }
