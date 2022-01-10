@@ -213,6 +213,7 @@ public class Sentimental {
 		 		{
 		 			try {
 						splitter = new FileWriter(input_Dir.toString() + "//" + "Datei" + Integer.toString(x) + ".json");
+						System.out.println(x);
 						i = 0;
 					} catch (IOException e) {
 						e.printStackTrace();
