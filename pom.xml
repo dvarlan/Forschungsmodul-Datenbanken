@@ -1,64 +1,66 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>DBS</groupId>
-  <artifactId>DBS</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <properties>
-  <maven.compiler.source>11</maven.compiler.source>
-  <maven.compiler.target>11</maven.compiler.target>
-  </properties>
-  <build>
-      <plugins>
-        <plugin>
+<project
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>DBS</groupId>
+    <artifactId>DBS</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <properties>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+    </properties>
+    <build>
+        <plugins>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.2.4</version>
-         <configuration>
-			<createDependencyReducedPom>false</createDependencyReducedPom>
-		 </configuration>
-		 <executions>
-		 <execution>
-			<phase>package</phase>
-		 <goals>
-			<goal>shade</goal>
-		 </goals>
-		 <configuration>
-		 <filters>
-			<filter>
-				<artifact>*:*</artifact>
-				<excludes>
-              <exclude>META-INF/*.SF</exclude>
-              <exclude>META-INF/*.DSA</exclude>
-              <exclude>META-INF/*.RSA</exclude>
-                  </excludes>
-                  </filter>
-         </filters>
-         </configuration>
-         </execution>
-          </executions>
-        </plugin>
-      </plugins>
-  </build>
-  <dependencies>
+                <configuration>
+                    <createDependencyReducedPom>false</createDependencyReducedPom>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    <dependencies>
         <dependency>
-        <groupId>org.apache.spark</groupId>
-                <artifactId>spark-core_2.12</artifactId>
-        <version>3.2.0</version>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-core_2.12</artifactId>
+            <version>3.2.0</version>
         </dependency>
         <dependency>
-        <groupId>org.apache.spark</groupId>
-        <artifactId>spark-sql_2.12</artifactId>
-        <version>3.2.0</version>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-sql_2.12</artifactId>
+            <version>3.2.0</version>
         </dependency>
         <dependency>
-                <groupId>org.apache.hadoop</groupId>
-                <artifactId>hadoop-client</artifactId>
-                <version>3.3.1</version>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-client</artifactId>
+            <version>3.3.1</version>
         </dependency>
         <dependency>
-                <groupId>edu.stanford.nlp</groupId>
-                <artifactId>stanford-corenlp</artifactId>
-                <version>4.3.2</version>
+            <groupId>edu.stanford.nlp</groupId>
+            <artifactId>stanford-corenlp</artifactId>
+            <version>4.3.2</version>
         </dependency>
         <dependency>
             <groupId>edu.stanford.nlp</groupId>
@@ -66,5 +68,5 @@
             <version>4.3.2</version>
             <classifier>models</classifier>
         </dependency>
-  </dependencies>
+    </dependencies>
 </project>
