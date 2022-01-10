@@ -82,7 +82,8 @@ public class Sentimental {
     			zu_pruefen.createOrReplaceTempView("zu_pruefen_view");
     			filterdatei = sparkSession.sql("Select text from zu_pruefen_view , filter_liste WHERE zu_pruefen_view.text LIKE ('%' || ' ' || filter_liste.term || ' ' || '%') ");  //pruefen auf enthalten der Filterliste
     			filterdatei.write().json(temp_Dir_1.toString() + "//" + Integer.toString(y));			//Output der gefilterten Datei, auf welche die sentimentanalyse ausgeführt wird
-    			y++;	
+    			System.out.print.ln(y);
+			y++;	
     			try {
 					Files.delete(input_path);
 				} catch (IOException e) {
