@@ -262,6 +262,19 @@ public class Sentimental {
 	 {
 		 Properties props = new Properties();
 		 props.setProperty("annotators", "tokenize, ssplit, pos, parse,sentiment");
+		 props.setProperty("file", f.toString());
+		 props.setProperty("-pos.model","edu/stanford/nlp/models/pos-tagger/english-bidirectional-distsim.tagger");
+		 props.setProperty("tokenize.options", "untokenizable = allDelete");
+		 props.setProperty("tokenize.options", "tokenizePerLine = true");
+		 props.setProperty("tokenize.options", "ud = true");
+		 props.setProperty("tokenize.options", "normalizeAmpersandEntity = true");
+		 props.setProperty("tokenize.options", "normalizeCurrency = true");
+		 props.setProperty("tokenize.options", "quotes = unicode");
+		 props.setProperty("tokenize.options", "splitAssimilations = false");
+		 props.setProperty("tokenize.options", "ellipses = unicode");
+		 props.setProperty("tokenize.options", "tokenizeNLs = false");
+		 props.setProperty("tokenize.options", "normalizeParentheses = true"); 
+		 props.setProperty("outputDirectory", temp_Dir_3.toString()); // Speicherort der Sentimentanalyse
 		 StanfordCoreNLP Pipeline = new StanfordCoreNLP(props);
 		 Stream<Path> e_stream = null;
 		 try 
@@ -281,19 +294,6 @@ public class Sentimental {
 		 {	
 			 if(!f.equals(temp_Dir_1))
 			 {
-				 props.setProperty("file", f.toString());
-				 props.setProperty("-pos.model","edu/stanford/nlp/models/pos-tagger/english-bidirectional-distsim.tagger");
-				 props.setProperty("tokenize.options", "untokenizable = allDelete");
-				 props.setProperty("tokenize.options", "tokenizePerLine = true");
-				 props.setProperty("tokenize.options", "ud = true");
-				 props.setProperty("tokenize.options", "normalizeAmpersandEntity = true");
-				 props.setProperty("tokenize.options", "normalizeCurrency = true");
-				 props.setProperty("tokenize.options", "quotes = unicode");
-				 props.setProperty("tokenize.options", "splitAssimilations = false");
-				 props.setProperty("tokenize.options", "ellipses = unicode");
-				 props.setProperty("tokenize.options", "tokenizeNLs = false");
-				 props.setProperty("tokenize.options", "normalizeParentheses = true"); 
-				 props.setProperty("outputDirectory", temp_Dir_3.toString()); // Speicherort der Sentimentanalyse
 				 try 
 				 {
 					 Pipeline.run();
