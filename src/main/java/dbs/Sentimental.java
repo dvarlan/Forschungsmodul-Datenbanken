@@ -262,7 +262,6 @@ public class Sentimental {
 	 {
 		 Properties props = new Properties();
 		 props.setProperty("annotators", "tokenize, ssplit, pos, parse,sentiment");
-		 props.setProperty("file", f.toString());
 		 props.setProperty("-pos.model","edu/stanford/nlp/models/pos-tagger/english-bidirectional-distsim.tagger");
 		 props.setProperty("tokenize.options", "untokenizable = allDelete");
 		 props.setProperty("tokenize.options", "tokenizePerLine = true");
@@ -294,6 +293,7 @@ public class Sentimental {
 		 {	
 			 if(!f.equals(temp_Dir_1))
 			 {
+				 props.setProperty("file", f.toString());
 				 try 
 				 {
 					 Pipeline.run();
