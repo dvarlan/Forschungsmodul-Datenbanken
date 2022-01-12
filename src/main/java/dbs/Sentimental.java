@@ -22,7 +22,7 @@ public class Sentimental {
 	public static Path input_Dir = Paths.get("/home/ubuntu/Datein/");						//Input directory of the Split up Json Files or any empty directory if Files are split automatically
 	public static Path result_Dir = Paths.get("/home/ubuntu/Ergebnis");					//Output directory of the result file containing only the text from negative sentiment tweets without metadata
 	public static Path temp_Dir_1 = Paths.get("/home/ubuntu/zu_pruefen");					//A temporary directory
-	public static Path filter_Dir = Paths.get("/home/ubuntu/FilterListen/Ethnic.csv");	//The Input directory and file name of the list of words used as a filter
+	public static Path filter_Dir = Paths.get("/home/ubuntu/FilterListen/merge.csv");	//The Input directory and file name of the list of words used as a filter
 	public static Path temp_Dir_3 = Paths.get("/home/ubuntu/Output");							//Temporary output path for the sentiment analysis, containing still both positive and negative tweets
 	public static Path negatives = Paths.get("/home/ubuntu/Negatives/");			//Finaler outputpfad in dem die Negativen Sentiment Dateien gespeichert werden
 	public static String neg = "sentiment: Negative):";
