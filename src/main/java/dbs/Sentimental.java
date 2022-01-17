@@ -33,10 +33,10 @@ public class Sentimental {
 	
 	 public static void main(String[] args) {
 		long unixstart = Instant.now().getEpochSecond();
-		split();
-		cross_reference();
-		meta_delete();
-		trim();
+		//split();
+		//cross_reference();
+		//meta_delete();
+		//trim();
 		analyse_sentiment();
 		move_negatives();
 		write_result();
