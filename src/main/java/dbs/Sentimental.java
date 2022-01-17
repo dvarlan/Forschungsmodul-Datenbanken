@@ -37,10 +37,10 @@ public class Sentimental {
 		cross_reference();
 		meta_delete();
 		trim();
-		//analyse_sentiment();
-		//move_negatives();
-		//write_result();
-	    //runtime(unixstart);
+		analyse_sentiment();
+		move_negatives();
+		write_result();
+	    	runtime(unixstart);
 	    //System.out.print(((int) (tweet_counter) / hate_tweets!=0?hate_tweets:1) + "%");
 	 }
 
