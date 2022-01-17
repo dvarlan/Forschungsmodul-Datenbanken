@@ -36,10 +36,11 @@ public class Sentimental {
 		split();
 		cross_reference();
 		meta_delete();
-		analyse_sentiment();
-		move_negatives();
-		write_result();
-	    runtime(unixstart);
+		trim();
+		//analyse_sentiment();
+		//move_negatives();
+		//write_result();
+	    //runtime(unixstart);
 	    //System.out.print(((int) (tweet_counter) / hate_tweets!=0?hate_tweets:1) + "%");
 	 }
 
@@ -213,7 +214,6 @@ public class Sentimental {
 		 		{
 		 			try {
 						splitter = new FileWriter(input_Dir.toString() + "//" + "Datei" + Integer.toString(x) + ".json");
-						System.out.println(x);
 						i = 0;
 					} catch (IOException e) {
 						e.printStackTrace();
@@ -263,22 +263,14 @@ public class Sentimental {
 		 Properties props = new Properties();
 		 props.setProperty("annotators", "tokenize, ssplit, pos, parse,sentiment");
 		 props.setProperty("-pos.model","edu/stanford/nlp/models/pos-tagger/english-bidirectional-distsim.tagger");
-		 props.setProperty("tokenize.options", "untokenizable = allDelete");
-		 props.setProperty("tokenize.options", "tokenizePerLine = true");
-		 props.setProperty("tokenize.options", "ud = true");
-		 props.setProperty("tokenize.options", "normalizeAmpersandEntity = true");
-		 props.setProperty("tokenize.options", "normalizeCurrency = true");
-		 props.setProperty("tokenize.options", "quotes = unicode");
-		 props.setProperty("tokenize.options", "splitAssimilations = false");
-		 props.setProperty("tokenize.options", "ellipses = unicode");
-		 props.setProperty("tokenize.options", "tokenizeNLs = false");
-		 props.setProperty("tokenize.options", "normalizeParentheses = true"); 
+		 props.setProperty("tokenize.options", "tokenizeNLs=false,normalizeParentheses=true,ud=true,untokenizable=allDelete,tokenizePerLine=true,ellipses=unicode,normalizeAmpersandEntity=true,splitHyphenated=false,splitAssimilations=false,quotes=unicode,normalizeFractions=true,normalizeCurrency=true");
+		 props.setProperty("parse.model", "edu/stanford/nlp/models/srparser/englishSR.ser.gz");		//schnellerer parser
 		 props.setProperty("outputDirectory", temp_Dir_3.toString()); // Speicherort der Sentimentanalyse
 		 StanfordCoreNLP Pipeline = new StanfordCoreNLP(props);
 		 Stream<Path> e_stream = null;
 		 try 
 		 {
-			e_stream = Files.walk(temp_Dir_1);
+			e_stream = Files.walk(input_Dir);
 		 } 
 		 catch (IOException e5) 
 		 {
@@ -291,8 +283,8 @@ public class Sentimental {
 		 Path[] e_array = Arrays.copyOf(e_array_temp, e_array_temp.length, Path[].class);
 		 for(Path f : e_array)			// Die sentimentanalyse wird ausgeführt 
 		 {	
-			 if(!f.equals(temp_Dir_1))
-			 {
+			 if(!f.equals(input_Dir))
+			 {		
 				 props.setProperty("file", f.toString());
 				 try 
 				 {
@@ -466,6 +458,68 @@ public class Sentimental {
 			System.out.println("Debug13");
 			System.exit(9);
 		}
+	 }
+	 
+	 public static void trim()
+	 {
+		 Stream<Path> trim_stream = null;
+		 try {
+			 trim_stream = Files.walk(temp_Dir_1);
+		} 
+		 catch (IOException e6) 
+		{
+			 e6.printStackTrace();
+			 System.out.println("Debug3");
+			 System.exit(9);
+		}
+		FileWriter trimmer = null;
+	 	Object[] trim_array_temp = trim_stream.toArray();
+ 	    trim_stream.close();
+ 	    int y = 0;
+ 	    String temp;
+ 	    Path[] trim_array = Arrays.copyOf(trim_array_temp, trim_array_temp.length, Path[].class);
+	    for(Path x : trim_array)
+	    {
+			 if(!x.equals(temp_Dir_1))
+			 {
+				 try 
+				 {
+					scan = new Scanner(x.toFile());
+				 } 
+				 catch (FileNotFoundException e2)
+				 {
+					e2.printStackTrace();
+				 }
+				 if(scan.hasNextLine())
+				 {
+					try {
+						trimmer = new FileWriter(input_Dir.toString() + "//" + "trimmed" + Integer.toString(y) + ".json");
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					 while(scan.hasNextLine())
+					 {
+						 temp = scan.nextLine(); 
+						 try {
+							trimmer.write(temp.trim().substring(9,temp.length()-2).replaceAll("^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]",""));
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					 }
+					y++;
+					try {
+						trimmer.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				 }
+				 scan.close();
+			 }
+	    }
 	 }
  }
 
