@@ -520,6 +520,7 @@ public class Sentimental {
 					
 				 }
 				 scan.close();
+				 x.toFile().delete();
 			 }
 	    }
 	 }
