@@ -267,7 +267,7 @@ public class Sentimental {
 		 props.setProperty("pos.model","edu/stanford/nlp/models/pos-tagger/english-left3words-distsim.tagger");
 		 props.setProperty("tokenize.options", "tokenizeNLs=false,normalizeParentheses=true,ud=true,untokenizable=allDelete,tokenizePerLine=true,ellipses=unicode,normalizeAmpersandEntity=true,splitHyphenated=false,splitAssimilations=false,quotes=unicode,normalizeFractions=true,normalizeCurrency=true");
 		 props.setProperty("ssplit.newlineIsSentenceBreak", "always");
-		 props.setProperty("parse.model", "edu/stanford/nlp/models/srparser/englishSR.ser.gz");		//schnellerer parser
+		// props.setProperty("parse.model", "edu/stanford/nlp/models/srparser/englishSR.ser.gz");		//schnellerer parser
 		 props.setProperty("outputDirectory", temp_Dir_3.toString()); // Speicherort der Sentimentanalyse
 		 StanfordCoreNLP Pipeline = new StanfordCoreNLP(props);
 		 Stream<Path> e_stream = null;
