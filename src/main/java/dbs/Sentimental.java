@@ -505,7 +505,7 @@ public class Sentimental {
 					 {
 						 temp = scan.nextLine(); 
 						 try {
-							trimmer.write(temp.trim().substring(9,temp.length()).replaceAll("\"}", "\n").replaceAll("^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]","").replaceAll("https:\\/\\/[a-zA-Z]*.[a-zA-Z]*\\/[a-zA-Z0-9]*", ""));						} catch (IOException e) {
+							trimmer.write(temp.trim().substring(9,temp.length()).replaceAll("\n"," ").replaceAll("\"}", "\n").replaceAll("^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]","").replaceAll("https:\\/\\/[a-zA-Z]*.[a-zA-Z]*\\/[a-zA-Z0-9]*", ""));						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
