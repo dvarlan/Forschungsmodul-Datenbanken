@@ -42,7 +42,9 @@ public class Sentimental {
 		move_negatives();
 		write_result();
 	    	runtime(unixstart);
-	    	System.out.print(((int) ((tweet_counter) / hate_tweets!=0?hate_tweets:1)) + "%");
+	    	System.out.println(((int) ((tweet_counter) / hate_tweets!=0?hate_tweets:1)) + "%");
+		System.out.println("Tweets: " + tweet_counter);
+		System.out.println("Detected Hate Tweets: " + hate_tweets);
 	 }
 
 
