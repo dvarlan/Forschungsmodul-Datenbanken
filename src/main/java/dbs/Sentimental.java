@@ -15,7 +15,15 @@ import java.nio.file.*;
 import java.nio.file.Files;
 import java.time.Instant;
 import edu.stanford.nlp.parser.*;
-
+import com.kennycason.kumo.nlp.FrequencyFileLoader;
+import com.kennycason.kumo.CollisionMode;
+import com.kennycason.kumo.WordCloud;
+import com.kennycason.kumo.WordFrequency;
+import com.kennycason.kumo.bg.PixelBoundaryBackground;
+import com.kennycason.kumo.font.scale.LinearFontScalar;
+import com.kennycason.kumo.nlp.FrequencyAnalyzer;
+import com.kennycason.kumo.palette.ColorPalette;
+import java.awt.*;
 
 public class Sentimental {
 	static int filecount = 0;
@@ -31,6 +39,8 @@ public class Sentimental {
 	public static Scanner scan;
 	public static long tweet_counter = 0;
 	public static long hate_tweets = 0;
+	public static Path cloud = Paths.get("/home/ubuntu/cloud/");
+   	public static Path cloud_picture = Paths.get("/home/ubuntu/picture/picture.png");
 	
 	 public static void main(String[] args) {
 		long unixstart = Instant.now().getEpochSecond();
@@ -47,7 +57,103 @@ public class Sentimental {
 		System.out.println("Detected Hate Tweets: " + hate_tweets);
 	 }
 
+	 public static void wordClouds() {
+		SparkConf sparkConf = new SparkConf().setAppName("Word_Cloud");
+	    sparkConf.setMaster("local[*]");
+	    System.setProperty("illegal-access", "permit");
+	    SparkSession sparkSession = SparkSession.builder().config(sparkConf).getOrCreate();
+	    Stream<Path> paths = null;
+	    Dataset<Row> hashtags;
+		try 
+		{
+			paths = Files.walk(split_Dir);
+		} 
+		catch (IOException e7) 
+		{
+			e7.printStackTrace();
+			System.out.println("Debugcloud");
+			System.exit(10);
+		}
+		Dataset<Row> hashtag_sums = null;
+		boolean define_schema = true;
+		Object[] temp = paths.toArray();
+	    Path[] inputs = Arrays.copyOf(temp, temp.length, Path[].class);
+	    Integer i = 0;
+	    for(Path input_path : inputs)
+	    {	
+    		if(!input_path.equals(input_Dir))
+    		{
+    			hashtags = sparkSession.read().option("inferSchema", true).json(input_path.toString()); //Pfad und name der einzulesenden Dateien hier "Datei(i).json"
+    			hashtags.createOrReplaceTempView("hashtagview");
+    			hashtags = hashtags.sparkSession().sql("Select extended_tweet.entities.hashtags.text FROM hashtagview WHERE extended_tweet.entities.hashtags.text IS NOT NULL AND LENGTH(extended_tweet.entities.hashtags.text[0]) > 0");
+    			hashtags = hashtags.select(functions.explode(hashtags.col("text")).as("einzelne_hashtags"));
+    			hashtags.createOrReplaceTempView("hashtagviewneu");
+    			hashtags = hashtags.sparkSession().sql("SELECT einzelne_hashtags, COUNT(*) AS Hashtagcount FROM hashtagviewneu GROUP BY einzelne_hashtags");
+    			hashtags.createOrReplaceTempView("merge");
+    			if(define_schema) 
+    			{
+    				hashtag_sums = sparkSession.sql("SELECT * FROM merge");
+    				define_schema = false;
+    			} 
+    			else 
+    			{	
+    				hashtag_sums.createOrReplaceTempView("sums" + i.toString());
+    				hashtag_sums = hashtag_sums.sparkSession().sql("SELECT v1.einzelne_hashtags, v1.Hashtagcount AS Hashtagcount,v2.Hashtagcount AS to_add FROM " + "sums" + i.toString() +  " v1 JOIN merge v2 ON v1.einzelne_hashtags = v2.einzelne_Hashtags");
+    				hashtag_sums.createOrReplaceTempView("sums1" + i.toString());
+    				hashtag_sums = hashtag_sums.sparkSession().sql("SELECT einzelne_hashtags, (Hashtagcount + to_add) AS Hashtagcount from sums1" + i.toString());
+    				hashtag_sums = hashtag_sums.drop("to_add");
+    				hashtag_sums.createOrReplaceTempView("sums11" + i.toString());
+    				hashtag_sums = hashtag_sums.sparkSession().sql("SELECT * FROM sums11" + i.toString() +  " UNION (SELECT * FROM  merge LEFT ANTI JOIN sums1" +i.toString() + " )");
+    				i++;
+    			}
+				hashtag_sums.show(100,false);
 
+    		}
+	    }
+	    hashtag_sums.createOrReplaceTempView("swap");
+	    hashtag_sums = hashtag_sums.sparkSession().sql("SELECT Hashtagcount, einzelne_hashtags FROM swap ");
+	    hashtag_sums.write().option("sep", ":").csv(cloud.toString());
+		Stream <Path> cloud_stream = null;
+		try {
+			cloud_stream = Files.walk(cloud);
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Debugcloud");
+			System.exit(8);
+		}
+		Object[] cloudarray = cloud_stream.toArray();
+	    Path[] cloudpaths = Arrays.copyOf(cloudarray, cloudarray.length, Path[].class);
+	    List<WordFrequency> frequencyList = null;
+	    for(Path cloud_path : cloudpaths)
+	    {	
+    		if(!cloud_path.equals(cloud))
+    			{
+    				if(cloud_path.toString().contains("csv") && !cloud_path.toString().contains("crc"))
+    				{
+    					FrequencyFileLoader loader = new FrequencyFileLoader();
+    					try {
+    						frequencyList = loader.load(cloud_path.toFile());
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+    					final Dimension dimension = new Dimension(768, 624);
+    			        final WordCloud wordCloud = new WordCloud(dimension, CollisionMode.PIXEL_PERFECT);
+    			        wordCloud.setPadding(2);
+    			        try {
+							wordCloud.setBackground(new PixelBoundaryBackground(cloud_picture.toString()));
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+    			        wordCloud.setColorPalette(new ColorPalette(new Color(0x4055F1), new Color(0x408DF1), new Color(0x40AAF1), new Color(0x40C5F1), new Color(0x40D3F1), new Color(0xFFFFFF)));
+    			        wordCloud.setFontScalar(new LinearFontScalar(20, 50)); //Verändert die Größe der Schrift
+    			        wordCloud.build(frequencyList);
+    			        wordCloud.writeToFile(cloud.toString()+ "result.png"); //Output Dir.
+    			        break;
+    				}
+    			}
+	 }
+	 }	
+	
 
 	 public static void runtime(long unixstart) {
 
