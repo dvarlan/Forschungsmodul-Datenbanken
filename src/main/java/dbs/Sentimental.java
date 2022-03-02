@@ -48,6 +48,18 @@ public class Sentimental {
 			   wordClouds();
 			   return;
 		   }
+		 if(args.length > 0 && args[0].equals("hatecloud"))
+		 {
+			cross_reference_as_Json();
+			meta_delete_hatecloud();
+			wordClouds();
+			try {
+				Files.move(Paths.get(cloud.toString()+ "result.png"),Paths.get(cloud.toString() + "hatecloud.png"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return;
+		 }
 		long unixstart = Instant.now().getEpochSecond();
 		split();
 		cross_reference();
@@ -63,7 +75,8 @@ public class Sentimental {
 	 }
 
 	 public static void wordClouds() {
-		SparkConf sparkConf = new SparkConf().setAppName("Word_Cloud");
+            SparkConf sparkConf = new SparkConf().setAppName("Word_Cloud");
+	    sparkConf.set("spark.sql.optimizer.maxIterations", "500000000");
 	    sparkConf.setMaster("local[*]");
 	    System.setProperty("illegal-access", "permit");
 	    SparkSession sparkSession = SparkSession.builder().config(sparkConf).getOrCreate();
@@ -641,6 +654,125 @@ public class Sentimental {
 			 }
 	    }
 	 }
+	 public static void cross_reference_as_Json()
+	 {
+		    SparkConf sparkConf = new SparkConf().setAppName("Hate_Speech_Filter");
+		    sparkConf.setMaster("local[*]");
+		    System.setProperty("illegal-access", "permit");
+		    SparkSession sparkSession = SparkSession.builder().config(sparkConf).getOrCreate();
+		    Dataset<Row> filterdatei = sparkSession.read().option("inferSchema", true).option("sep",";").option("header", true).csv(filter_Dir.toString()); //die Optionen und der Pfad des Dictionaries mit dem gefiltert wird
+		    filterdatei.createOrReplaceTempView("filter_liste");
+		    Stream<Path> paths = null;
+			try 
+			{
+				paths = Files.walk(split_Dir);
+			} 
+			catch (IOException e7) 
+			{
+				e7.printStackTrace();
+				System.out.println("Debug2");
+				System.exit(9);
+			}
+			Object[] temp = paths.toArray();
+		    Path[] inputs = Arrays.copyOf(temp, temp.length, Path[].class);
+		    int y = 1;
+		    for(Path input_path : inputs)
+		    {	
+	    		if(!input_path.equals(split_Dir))
+	    			{
+	    			Dataset<Row> zu_pruefen = sparkSession.read().option("inferSchema", true).json(input_path.toString()); //Pfad und name der einzulesenden Dateien hier "Datei(i).json"
+	    			zu_pruefen.createOrReplaceTempView("zu_pruefen_view");
+	    			filterdatei = sparkSession.sql("Select * from zu_pruefen_view , filter_liste WHERE zu_pruefen_view.extended_tweet.full_text LIKE ('%' || ' ' || filter_liste.term || ' ' || '%') ");  //pruefen auf enthalten der Filterliste
+	    			filterdatei.write().json(split_Dir.toString() + "//" + Integer.toString(y));			//Output der gefilterten Datei, auf welche die sentimentanalyse ausgeführt wird
+	    			System.out.println(y);
+				y++;	
+	    			try {
+						Files.delete(input_path);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+		    }
+		 }
+		 
+	 public static void meta_delete_hatecloud() 
+	 {
+		 int i = 1;
+		 Stream<Path> a_stream = null;
+		 try {
+			 a_stream = Files.walk(split_Dir);
+		} 
+		 catch (IOException e6) 
+		{
+			 e6.printStackTrace();
+			 System.out.println("Debug3");
+			 System.exit(9);
+		}
+	 	Object[] a_array_temp = a_stream.toArray();
+ 	    a_stream.close();
+ 	    Path[] a_array = Arrays.copyOf(a_array_temp, a_array_temp.length, Path[].class);
+	    for(Path d : a_array)  			//alle metadateien werden gelöscht die zu pruefenden dateien werden umbenannt in einem inkrementierenden schema
+	    {			
+			if(!d.equals(split_Dir))
+			{
+	    		if(d.toString().contains(".crc") || d.toString().contains("_SUCCESS") ) 
+	    		{
+	    			try 
+	    			{
+						Files.delete(d);
+					} 
+	    			catch (IOException e1) 
+	    			{
+						e1.printStackTrace();
+						System.out.println("Debug4");
+						System.exit(9);
+					}
+		    	}
+		    	else if(d.toString().contains(".json"))
+		    	{
+		    		try 
+		    		{
+						filecount++;
+						Files.move(d, Paths.get(split_Dir.toString() + "//" + Integer.toString((int)Math.ceil(filecount/4)) + "_Datei_" + Integer.toString(i) +".json"),StandardCopyOption.REPLACE_EXISTING);
+						i++;
+		    		} 
+		    		catch (IOException e1) 
+		    		{
+						e1.printStackTrace();
+						System.out.println("Debug6");
+						System.exit(9);
+					}
+		    	}
+			}
+	    }
+		try {
+			 a_stream = Files.walk(split_Dir);
+		} 
+		 catch (IOException e6) 
+		{
+			 e6.printStackTrace();
+			 System.out.println("Debug3");
+			 System.exit(9);
+		}
+		a_array_temp = a_stream.toArray();
+ 	    a_stream.close();
+ 	    a_array = Arrays.copyOf(a_array_temp, a_array_temp.length, Path[].class);
+	    for(Path d : a_array)
+	    {
+	    	if(d != null && !d.toString().contains(".json") && !d.equals(split_Dir) )
+	    	{
+	    		try 
+	    		{
+					Files.delete(d);
+				} catch (IOException e) 
+	    		{
+					e.printStackTrace();
+					System.out.println("Debug_delete_empty_folders");
+				}
+	    	}
+	    }
+	 }
+	 
  }
 
 
