@@ -43,6 +43,11 @@ public class Sentimental {
    	public static Path cloud_picture = Paths.get("/home/ubuntu/picture/picture.png");
 	
 	 public static void main(String[] args) {
+		if(args[0].equals("cloud")
+		   {
+			   wordClouds();
+			   return;
+		   }
 		long unixstart = Instant.now().getEpochSecond();
 		split();
 		cross_reference();
