@@ -104,11 +104,11 @@ public class Sentimental {
     			{	
     				hashtag_sums.createOrReplaceTempView("sums" + i.toString());
     				hashtag_sums = hashtag_sums.sparkSession().sql("SELECT v1.einzelne_hashtags, v1.Hashtagcount AS Hashtagcount,v2.Hashtagcount AS to_add FROM " + "sums" + i.toString() +  " v1 JOIN merge v2 ON v1.einzelne_hashtags = v2.einzelne_Hashtags");
-    				hashtag_sums.createOrReplaceTempView("sums1" + i.toString());
-    				hashtag_sums = hashtag_sums.sparkSession().sql("SELECT einzelne_hashtags, (Hashtagcount + to_add) AS Hashtagcount from sums1" + i.toString());
+    				hashtag_sums.createOrReplaceTempView("sumsa1" + i.toString());
+    				hashtag_sums = hashtag_sums.sparkSession().sql("SELECT einzelne_hashtags, (Hashtagcount + to_add) AS Hashtagcount from sumsa1" + i.toString());
     				hashtag_sums = hashtag_sums.drop("to_add");
-    				hashtag_sums.createOrReplaceTempView("sums11" + i.toString());
-    				hashtag_sums = hashtag_sums.sparkSession().sql("SELECT * FROM sums11" + i.toString() +  " UNION (SELECT * FROM  merge LEFT ANTI JOIN sums1" +i.toString() + " )");
+    				hashtag_sums.createOrReplaceTempView("sumsb11" + i.toString());
+    				hashtag_sums = hashtag_sums.sparkSession().sql("SELECT * FROM sumsb11" + i.toString() +  " UNION (SELECT * FROM  merge LEFT ANTI JOIN sumsa1" +i.toString() + " )");
     				i++;
     			}
 				hashtag_sums.show(100,false);
