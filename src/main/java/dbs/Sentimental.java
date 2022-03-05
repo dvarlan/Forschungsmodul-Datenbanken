@@ -118,7 +118,6 @@ public class Sentimental {
     			} 
     			else 
     			{	
-
 					juggle_Set = hashtag_sums.join(hashtags, hashtag_sums.col("Hashtaggruppe").equalTo(hashtags.col("einzelne_hashtags")), "left");
 					juggle_Set = juggle_Set.where(juggle_Set.col("einzelne_hashtags").isNotNull()).withColumn("Häufigkeit", functions.col("Häufigkeit").plus(functions.col("Hashtagcount")));
 					juggle_Set = juggle_Set.drop("einzelne_hashtags").drop("Hashtagcount");
