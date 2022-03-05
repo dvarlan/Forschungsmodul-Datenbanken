@@ -75,13 +75,14 @@ public class Sentimental {
 	 }
 
 	 public static void wordClouds() {
-            SparkConf sparkConf = new SparkConf().setAppName("Word_Cloud");
-	    sparkConf.set("spark.sql.optimizer.maxIterations", "500000000");
+		SparkConf sparkConf = new SparkConf().setAppName("Word_Cloud");
+		sparkConf.set("spark.sql.optimizer.maxIterations", "300000");
 	    sparkConf.setMaster("local[*]");
 	    System.setProperty("illegal-access", "permit");
 	    SparkSession sparkSession = SparkSession.builder().config(sparkConf).getOrCreate();
 	    Stream<Path> paths = null;
 	    Dataset<Row> hashtags;
+	    RelationalGroupedDataset grouped_table;
 		try 
 		{
 			paths = Files.walk(split_Dir);
@@ -96,41 +97,38 @@ public class Sentimental {
 		boolean define_schema = true;
 		Object[] temp = paths.toArray();
 	    Path[] inputs = Arrays.copyOf(temp, temp.length, Path[].class);
+	    Dataset<Row> juggle_Set = null;
+	    Dataset<Row> leftAntiJoin; 
 	    Integer i = 0;
 	    for(Path input_path : inputs)
 	    {	
-    		if(!input_path.equals(input_Dir))
+	    	System.out.println("working");
+    		if(!input_path.equals(split_Dir))
     		{
     			hashtags = sparkSession.read().option("inferSchema", true).json(input_path.toString()); //Pfad und name der einzulesenden Dateien hier "Datei(i).json"
-    			hashtags.createOrReplaceTempView("hashtagview");
-    			hashtags = hashtags.sparkSession().sql("Select extended_tweet.entities.hashtags.text FROM hashtagview WHERE extended_tweet.entities.hashtags.text IS NOT NULL AND LENGTH(extended_tweet.entities.hashtags.text[0]) > 0");
+    			hashtags = hashtags.select(hashtags.col("extended_tweet.entities.hashtags.text")).where(hashtags.col("extended_tweet.entities.hashtags").isNotNull().and(hashtags.col("extended_tweet.entities.hashtags.text").getItem(0).$greater("")));
     			hashtags = hashtags.select(functions.explode(hashtags.col("text")).as("einzelne_hashtags"));
-    			hashtags.createOrReplaceTempView("hashtagviewneu");
-    			hashtags = hashtags.sparkSession().sql("SELECT einzelne_hashtags, COUNT(*) AS Hashtagcount FROM hashtagviewneu GROUP BY einzelne_hashtags");
-    			hashtags.createOrReplaceTempView("merge");
-    			if(define_schema) 
+    			grouped_table = hashtags.groupBy(hashtags.col("einzelne_hashtags"));
+    			hashtags = grouped_table.count().withColumnRenamed("count","Hashtagcount");
+    			
+    			if(define_schema) // hashtag_sums beschreibt die Ergebnistabelle, beim ersten Anlaufen wird diese mit den Hashtags und deren Anzahl der Ersten Datei gefüllt
     			{
-    				hashtag_sums = sparkSession.sql("SELECT * FROM merge");
+    				hashtag_sums = hashtags.select("einzelne_hashtags", "Hashtagcount").withColumnRenamed("einzelne_hashtags", "Hashtaggruppe").withColumnRenamed("Hashtagcount", "Häufigkeit");
     				define_schema = false;
     			} 
     			else 
     			{	
-    				hashtag_sums.createOrReplaceTempView("sums" + i.toString());
-    				hashtag_sums = hashtag_sums.sparkSession().sql("SELECT v1.einzelne_hashtags, v1.Hashtagcount AS Hashtagcount,v2.Hashtagcount AS to_add FROM " + "sums" + i.toString() +  " v1 JOIN merge v2 ON v1.einzelne_hashtags = v2.einzelne_Hashtags");
-    				hashtag_sums.createOrReplaceTempView("sums1" + i.toString());
-    				hashtag_sums = hashtag_sums.sparkSession().sql("SELECT einzelne_hashtags, (Hashtagcount + to_add) AS Hashtagcount from sums1" + i.toString());
-    				hashtag_sums = hashtag_sums.drop("to_add");
-    				hashtag_sums.createOrReplaceTempView("sums11" + i.toString());
-    				hashtag_sums = hashtag_sums.sparkSession().sql("SELECT * FROM sums11" + i.toString() +  " UNION (SELECT * FROM  merge LEFT ANTI JOIN sums1" +i.toString() + " )");
-    				i++;
-    			}
-				hashtag_sums.show(100,false);
 
+					juggle_Set = hashtag_sums.join(hashtags, hashtag_sums.col("Hashtaggruppe").equalTo(hashtags.col("einzelne_hashtags")), "left");
+					juggle_Set = juggle_Set.where(juggle_Set.col("einzelne_hashtags").isNotNull()).withColumn("Häufigkeit", functions.col("Häufigkeit").plus(functions.col("Hashtagcount")));
+					juggle_Set = juggle_Set.drop("einzelne_hashtags").drop("Hashtagcount");
+					leftAntiJoin = hashtags.join(juggle_Set, hashtags.col("einzelne_hashtags").equalTo(juggle_Set.col("Hashtaggruppe")), "leftanti");
+					juggle_Set = juggle_Set.union(leftAntiJoin);   				
+    			}
     		}
 	    }
-	    hashtag_sums.createOrReplaceTempView("swap");
-	    hashtag_sums = hashtag_sums.sparkSession().sql("SELECT Hashtagcount, einzelne_hashtags FROM swap ");
-	    hashtag_sums.write().option("sep", ":").csv(cloud.toString());
+	    juggle_Set = juggle_Set.select(juggle_Set.col("Häufigkeit"),juggle_Set.col("Hashtaggruppe"));
+	    juggle_Set.write().option("sep", ":").csv(cloud.toString());
 		Stream <Path> cloud_stream = null;
 		try {
 			cloud_stream = Files.walk(cloud);
@@ -141,7 +139,7 @@ public class Sentimental {
 		}
 		Object[] cloudarray = cloud_stream.toArray();
 	    Path[] cloudpaths = Arrays.copyOf(cloudarray, cloudarray.length, Path[].class);
-	    java.util.List<WordFrequency> frequencyList = null;
+	    List<WordFrequency> frequencyList = null;
 	    for(Path cloud_path : cloudpaths)
 	    {	
     		if(!cloud_path.equals(cloud))
@@ -170,8 +168,7 @@ public class Sentimental {
     				}
     			}
 	 }
-	 }	
-	
+	 }
 
 	 public static void runtime(long unixstart) {
 
