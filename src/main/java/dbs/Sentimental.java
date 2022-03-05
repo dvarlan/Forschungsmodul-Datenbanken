@@ -602,7 +602,7 @@ public class Sentimental {
 			 System.out.println("Debug3");
 			 System.exit(9);
 		}
-		java.util.list<FileWriter> writers = new ArrayList<FileWriter>();
+		java.util.List<FileWriter> writers = new ArrayList<FileWriter>();
 		
 		for (int i = 0; i <= 46; i++) {
 		    FileWriter w;
