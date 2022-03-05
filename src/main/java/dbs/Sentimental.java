@@ -391,6 +391,7 @@ public class Sentimental {
 		 props.setProperty("ssplit.newlineIsSentenceBreak", "always");
 		 props.setProperty("parse.model", "/home/ubuntu/github/dbsprojekt/edu/stanford/nlp/models/srparser/englishSR.ser.gz");		//schnellerer parser
 		 props.setProperty("outputDirectory", temp_Dir_3.toString()); // Speicherort der Sentimentanalyse
+		 props.setProperty("outputExtension", ".txt");
 		 StanfordCoreNLP Pipeline = new StanfordCoreNLP(props);
 		 Stream<Path> e_stream = null;
 		 try 
@@ -413,6 +414,7 @@ public class Sentimental {
 				 props.setProperty("file", f.toString());
 				 try 
 				 {
+					 
 					 Pipeline.run();
 				 } 
 				 catch (IOException e1)
@@ -474,7 +476,8 @@ public class Sentimental {
 					 	try 
 					 	{
 					 		delete = false;
-					 		Files.move(g, Paths.get(negatives.toString() + "//File_" + Integer.toString(i) + "_" + Integer.toString(z)));
+					 		
+					 		Files.move(g,  Paths.get(negatives.toString() + g.toString().substring(temp_Dir_3.toString().length())));
 					 	} 
 					 	catch (IOException e2) 
 					 	{
@@ -506,16 +509,6 @@ public class Sentimental {
 	 public static void write_result() 
 	 {
 		 FileWriter result = null;
-		 try 
-		 {
-			 result = new FileWriter(result_Dir.toString() + "//Result.json");			//Pfad für das finale Ergebnis
-		 } 
-		 catch (IOException e5) 
-		 {
-			 e5.printStackTrace();
-			 System.out.println("Debug1");
-			 System.exit(9);
-		 }
 		 Stream<Path> negatives_stream = null;
 		 try 
 		 {
@@ -532,8 +525,15 @@ public class Sentimental {
 		 Path[] negatives_array = Arrays.copyOf(negatives_array_temp, negatives_array_temp.length, Path[].class);
 		 for(Path h : negatives_array)
 		 {
+
 			 if(!h.equals(negatives))
 			 {
+				 try {
+						result = new FileWriter( result_Dir.toString() + "//" + match_matches(h.toString().substring(negatives.toString().length()+1))+".json");
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+					 
 				 String temp_string;
 				 try 
 				 {
@@ -571,6 +571,11 @@ public class Sentimental {
 				 {
 					e.printStackTrace();
 				 }
+				 try {
+					result.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
     		}
     	}	  
 	    try 
@@ -597,11 +602,25 @@ public class Sentimental {
 			 System.out.println("Debug3");
 			 System.exit(9);
 		}
-		FileWriter trimmer = null;
+		List<FileWriter> writers = new ArrayList<FileWriter>();
+		
+		for (int i = 0; i <= 46; i++) {
+		    FileWriter w;
+			try {
+				w = new FileWriter(input_Dir.toString() + "//" + Integer.toString(i));
+			    writers.add(w);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		}
+		
 	 	Object[] trim_array_temp = trim_stream.toArray();
  	    trim_stream.close();
  	    int y = 0;
  	    String temp;
+ 	    String temp2;
+ 	    long zeit;
  	    Path[] trim_array = Arrays.copyOf(trim_array_temp, trim_array_temp.length, Path[].class);
 	    for(Path x : trim_array)
 	    {
@@ -617,158 +636,420 @@ public class Sentimental {
 				 }
 				 if(scan.hasNextLine())
 				 {
-					try {
-						trimmer = new FileWriter(input_Dir.toString() + "//" + "trimmed" + Integer.toString(y) + ".json");
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
 					 while(scan.hasNextLine())
 					 {
 						 temp = scan.nextLine(); 
 						 try {
 							if(temp.length() > 14) 
 							{
-								trimmer.write(temp.trim().substring(14,temp.length()).replaceAll("\n"," ").replaceAll("\"}", "\n").replaceAll("^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]","").replaceAll("https:\\/\\/[a-zA-Z]*.[a-zA-Z]*\\/[a-zA-Z0-9]*", ""));					
+								temp2 = temp.substring(temp.length() - 15, temp.length()).replaceAll("\"}","");
+								temp = temp.substring(14, temp.length() - 33);
+								temp = temp.concat("\n");
+								zeit =  Long.parseLong(temp2);
+								zeit -= 1623436200000L;
+								if (zeit < 0L) {
+									writers.get(45).write(temp);
+								}
+								else if(zeit >= 0L && zeit < 12600000L)
+								{
+									writers.get(0).write(temp);
+								}
+								else if(zeit >= 64800000L && zeit < 75600000L)
+								{
+									writers.get(1).write(temp);
+								}
+								else if(zeit >= 75600000L && zeit < 86400000L)
+								{
+									writers.get(2).write(temp);
+								}
+								else if(zeit >= 86400000L && zeit < 97200000L)
+								{
+									writers.get(3).write(temp);
+								}
+								else if(zeit >= 151200000L && zeit < 162000000L)
+								{
+									writers.get(4).write(temp);
+								}
+								else if(zeit >= 162000000L && zeit < 172800000L)
+								{
+									writers.get(5).write(temp);
+								}
+								else if(zeit >= 172800000L && zeit < 183600000L)
+								{
+									writers.get(6).write(temp);
+								}
+								else if(zeit >= 237600000L && zeit < 248400000L)
+								{
+									writers.get(7).write(temp);
+								}
+								else if(zeit >= 248400000L && zeit < 259200000L)
+								{
+									writers.get(8).write(temp);
+								}
+								else if(zeit >= 259200000L && zeit < 270000000L)
+								{
+									writers.get(9).write(temp);
+								}
+								else if(zeit >= 334800000L && zeit < 345600000L)
+								{
+									writers.get(10).write(temp);
+								}
+								else if(zeit >= 345600000L && zeit < 356400000L)
+								{
+									writers.get(11).write(temp);
+								}
+								else if(zeit >= 410400000L && zeit < 421200000L)
+								{
+									writers.get(12).write(temp);
+								}
+								else if(zeit >= 421200000L && zeit < 432000000L)
+								{
+									writers.get(13).write(temp);
+								}
+								else if(zeit >= 432000000L && zeit < 442800000L)
+								{
+									writers.get(14).write(temp);
+								}
+								else if(zeit >= 496800000L && zeit < 507600000L)
+								{
+									writers.get(15).write(temp);
+								}
+								else if(zeit >= 507600000L && zeit < 518400000L)
+								{
+									writers.get(16).write(temp);
+								}
+								else if(zeit >= 518400000L && zeit < 529200000L)
+								{
+									writers.get(17).write(temp);
+								}
+								else if(zeit >= 583200000L && zeit < 594000000L)
+								{
+									writers.get(18).write(temp);
+								}
+								else if(zeit >= 594000000L && zeit < 604800000L)
+								{
+									writers.get(19).write(temp);
+								}
+								else if(zeit >= 604800000L && zeit < 615600000L)
+								{
+									writers.get(20).write(temp);
+								}
+								else if(zeit >= 669600000L && zeit < 680400000L)
+								{
+									writers.get(21).write(temp);
+								}
+								else if(zeit >= 680400000L && zeit < 691200000L)
+								{
+									writers.get(22).write(temp);
+								}
+								else if(zeit >= 691200000L && zeit < 702000000L)
+								{
+									writers.get(23).write(temp);
+								}
+								else if(zeit >= 766800000L && zeit < 777600000L)
+								{
+									writers.get(24).write(temp);
+								}
+								else if(zeit >= 853200000L && zeit < 864000000L)
+								{
+									writers.get(25).write(temp);
+								}
+								else if(zeit >= 864000000L && zeit < 874800000L)
+								{
+									writers.get(26).write(temp);
+								}
+								else if(zeit >= 950400000L && zeit < 961200000L)
+								{
+									writers.get(27).write(temp);
+								}
+								else if(zeit >= 1026000000L && zeit < 1036800000L)
+								{
+									writers.get(28).write(temp);
+								}
+								else if(zeit >= 1036800000L && zeit < 1047600000L)
+								{
+									writers.get(29).write(temp);
+								}
+								else if(zeit >= 1285200000L && zeit < 1296000000L)
+								{
+									writers.get(30).write(temp);
+								}
+								else if(zeit >= 1296000000L && zeit < 1308000000L)
+								{
+									writers.get(31).write(temp);
+								}
+								else if(zeit >= 1371600000L && zeit < 1382400000L)
+								{
+									writers.get(32).write(temp);
+								}
+								else if(zeit >= 1382400000L && zeit < 1393200000L)
+								{
+									writers.get(33).write(temp);
+								}
+								else if(zeit >= 1458000000L && zeit < 1468800000L)
+								{
+									writers.get(34).write(temp);
+								}
+								else if(zeit >= 1468800000L && zeit < 1479600000L)
+								{
+									writers.get(35).write(temp);
+								}
+								else if(zeit >= 1544400000L && zeit < 1555200000L)
+								{
+									writers.get(36).write(temp);
+								}
+								else if(zeit >= 1555200000L && zeit < 1566000000L)
+								{
+									writers.get(37).write(temp);
+								}
+								else if(zeit >= 1803600000L && zeit < 1814400000L)
+								{
+									writers.get(38).write(temp);
+								}
+								else if(zeit >= 1814400000L && zeit < 1825200000L)
+								{
+									writers.get(39).write(temp);
+								}
+								else if(zeit >= 1890000000L && zeit < 1900800000L)
+								{
+									writers.get(40).write(temp);
+								}
+								else if(zeit >= 1900800000L && zeit < 1911600000L)
+								{
+									writers.get(41).write(temp);
+								}
+								else if(zeit >= 2160000000L && zeit < 2172000000L)
+								{
+									writers.get(42).write(temp);
+								}
+								else if(zeit >= 2246400000L && zeit < 2258400000L)
+								{
+									writers.get(43).write(temp);
+								}
+								else if(zeit >= 2592000000L && zeit < 2604000000L)
+								{
+									writers.get(44).write(temp);
+								}
+								else
+								{
+									writers.get(46).write(temp);
+
+								}
 							} 
 						 } catch (IOException e) 
 						 {
 							e.printStackTrace();
 							}
 					 }
-					y++;
-					try {
-						trimmer.close();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
-				 }
-				 scan.close();
-				 x.toFile().delete();
+					 y++;
+					 scan.close();
+					 x.toFile().delete();
 			 }
 	    }
-	 }
-	 public static void cross_reference_as_Json()
-	 {
-		    SparkConf sparkConf = new SparkConf().setAppName("Hate_Speech_Filter");
-		    sparkConf.setMaster("local[*]");
-		    System.setProperty("illegal-access", "permit");
-		    SparkSession sparkSession = SparkSession.builder().config(sparkConf).getOrCreate();
-		    Dataset<Row> filterdatei = sparkSession.read().option("inferSchema", true).option("sep",";").option("header", true).csv(filter_Dir.toString()); //die Optionen und der Pfad des Dictionaries mit dem gefiltert wird
-		    filterdatei.createOrReplaceTempView("filter_liste");
-		    Stream<Path> paths = null;
-			try 
-			{
-				paths = Files.walk(split_Dir);
-			} 
-			catch (IOException e7) 
-			{
-				e7.printStackTrace();
-				System.out.println("Debug2");
-				System.exit(9);
-			}
-			Object[] temp = paths.toArray();
-		    Path[] inputs = Arrays.copyOf(temp, temp.length, Path[].class);
-		    int y = 1;
-		    for(Path input_path : inputs)
-		    {	
-	    		if(!input_path.equals(split_Dir))
-	    			{
-	    			Dataset<Row> zu_pruefen = sparkSession.read().option("inferSchema", true).json(input_path.toString()); //Pfad und name der einzulesenden Dateien hier "Datei(i).json"
-	    			zu_pruefen.createOrReplaceTempView("zu_pruefen_view");
-	    			filterdatei = sparkSession.sql("Select * from zu_pruefen_view , filter_liste WHERE zu_pruefen_view.extended_tweet.full_text LIKE ('%' || ' ' || filter_liste.term || ' ' || '%') ");  //pruefen auf enthalten der Filterliste
-	    			filterdatei.write().json(split_Dir.toString() + "//" + Integer.toString(y));			//Output der gefilterten Datei, auf welche die sentimentanalyse ausgeführt wird
-	    			System.out.println(y);
-				y++;	
-	    			try {
-						Files.delete(input_path);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-		    }
-		 }
-		 
-	 public static void meta_delete_hatecloud() 
-	 {
-		 int i = 1;
-		 Stream<Path> a_stream = null;
-		 try {
-			 a_stream = Files.walk(split_Dir);
-		} 
-		 catch (IOException e6) 
-		{
-			 e6.printStackTrace();
-			 System.out.println("Debug3");
-			 System.exit(9);
-		}
-	 	Object[] a_array_temp = a_stream.toArray();
- 	    a_stream.close();
- 	    Path[] a_array = Arrays.copyOf(a_array_temp, a_array_temp.length, Path[].class);
-	    for(Path d : a_array)  			//alle metadateien werden gelöscht die zu pruefenden dateien werden umbenannt in einem inkrementierenden schema
-	    {			
-			if(!d.equals(split_Dir))
-			{
-	    		if(d.toString().contains(".crc") || d.toString().contains("_SUCCESS") ) 
-	    		{
-	    			try 
-	    			{
-						Files.delete(d);
-					} 
-	    			catch (IOException e1) 
-	    			{
-						e1.printStackTrace();
-						System.out.println("Debug4");
-						System.exit(9);
-					}
-		    	}
-		    	else if(d.toString().contains(".json"))
-		    	{
-		    		try 
-		    		{
-						filecount++;
-						Files.move(d, Paths.get(split_Dir.toString() + "//" + Integer.toString((int)Math.ceil(filecount/4)) + "_Datei_" + Integer.toString(i) +".json"),StandardCopyOption.REPLACE_EXISTING);
-						i++;
-		    		} 
-		    		catch (IOException e1) 
-		    		{
-						e1.printStackTrace();
-						System.out.println("Debug6");
-						System.exit(9);
-					}
-		    	}
-			}
 	    }
-		try {
-			 a_stream = Files.walk(split_Dir);
-		} 
-		 catch (IOException e6) 
-		{
-			 e6.printStackTrace();
-			 System.out.println("Debug3");
-			 System.exit(9);
-		}
-		a_array_temp = a_stream.toArray();
- 	    a_stream.close();
- 	    a_array = Arrays.copyOf(a_array_temp, a_array_temp.length, Path[].class);
-	    for(Path d : a_array)
-	    {
-	    	if(d != null && !d.toString().contains(".json") && !d.equals(split_Dir) )
-	    	{
-	    		try 
-	    		{
-					Files.delete(d);
-				} catch (IOException e) 
-	    		{
-					e.printStackTrace();
-					System.out.println("Debug_delete_empty_folders");
-				}
-	    	}
-	    }
+	    
+	    for(FileWriter w : writers) {
+	    	try {
+				w.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 	 }
-	 
  }
-
+	 public static String match_matches(String c) {
+		 c = c.replace(".txt", "");
+		 int a = Integer.parseInt(c);
+		 int i = 0;
+		 if(a == i) {
+			 return("TUR_ITA");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("WAL_SUI");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("DEN_FIN");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("BEL_RUS");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("ENG_CRO");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("AUS_MAC");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("NED_UKR");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("SCO_CZE");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("POL_SLOVAKIA");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("ESP_SWE");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("HUN_POR");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("FRA_GER");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("FIN_RUS");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("TUR_WAL");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("ITA_SUI");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("UKR_MAC");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("DEN_BEL");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("NED_AUS");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("SWE_SLOVAKIA");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("CRO_CZE");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("ENG_SCO");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("HUN_FRA");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("POR_GER");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("ESP_POL");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("SUI_TUR_AND_ITA_WAL");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("MAC_NED_AND_UKR_AUS");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("RUS_DEN_AND_FIN_BEL");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("CRO_SCO_AND_CZE_ENG");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("SWE_POL_AND_SLOV_ESP");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("POR_FRA_AND_GER_HUN");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("RO16_WAL_DEN");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("RO16_ITA_AUS");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("RO16_NED_CZE");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("RO16_BEL_POR");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("RO16_CRO_ESP");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("RO16_FRA_SUI");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("RO16_ENG_GER");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("RO16_SWE_UKR");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("RO8_SUI_ESP");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("RO8_BEL_ITA");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("RO8_CZE_DEN");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("RO8_UKR_ENG");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("SEMIS_ITA_ESP");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("SEMIS_ENG_DEN");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("FINAL_ENG_ITA");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("PRE_CUP");
+		 }
+		 i++;
+		 if(a == i) {
+			 return("POST_CUP");
+		 }
+		 else {
+			 return ("error");
+		 }
+	 }
+}
 
