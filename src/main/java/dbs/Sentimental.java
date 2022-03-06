@@ -50,6 +50,10 @@ public class Sentimental {
 		   }
 		 if(args.length > 0 && args[0].equals("hatecloud"))
 		 {
+			for(int i = 0;i < 100; i++) 
+			{
+				System.out.println("hatecloud inizialized");
+			}
 			cross_reference_as_Json();
 			meta_delete_hatecloud();
 			wordClouds();
@@ -85,7 +89,7 @@ public class Sentimental {
 	    RelationalGroupedDataset grouped_table;
 		try 
 		{
-			paths = Files.walk(split_Dir);
+			paths = Files.walk(temp_Dir_3);
 		} 
 		catch (IOException e7) 
 		{
@@ -103,7 +107,7 @@ public class Sentimental {
 	    for(Path input_path : inputs)
 	    {	
 	    	System.out.println("working");
-    		if(!input_path.equals(split_Dir))
+    		if(!input_path.equals(temp_Dir_3))
     		{
     			hashtags = sparkSession.read().option("inferSchema", true).json(input_path.toString()); //Pfad und name der einzulesenden Dateien hier "Datei(i).json"
     			hashtags = hashtags.select(hashtags.col("extended_tweet.entities.hashtags.text")).where(hashtags.col("extended_tweet.entities.hashtags").isNotNull().and(hashtags.col("extended_tweet.entities.hashtags.text").getItem(0).$greater("")));
@@ -118,6 +122,7 @@ public class Sentimental {
     			} 
     			else 
     			{	
+
 					juggle_Set = hashtag_sums.join(hashtags, hashtag_sums.col("Hashtaggruppe").equalTo(hashtags.col("einzelne_hashtags")), "left");
 					juggle_Set = juggle_Set.where(juggle_Set.col("einzelne_hashtags").isNotNull()).withColumn("Häufigkeit", functions.col("Häufigkeit").plus(functions.col("Hashtagcount")));
 					juggle_Set = juggle_Set.drop("einzelne_hashtags").drop("Hashtagcount");
@@ -127,6 +132,7 @@ public class Sentimental {
     		}
 	    }
 	    juggle_Set = juggle_Set.select(juggle_Set.col("Häufigkeit"),juggle_Set.col("Hashtaggruppe"));
+	    juggle_Set.show(100,false);
 	    juggle_Set.write().option("sep", ":").csv(cloud.toString());
 		Stream <Path> cloud_stream = null;
 		try {
@@ -138,35 +144,42 @@ public class Sentimental {
 		}
 		Object[] cloudarray = cloud_stream.toArray();
 	    Path[] cloudpaths = Arrays.copyOf(cloudarray, cloudarray.length, Path[].class);
-	    java.util.List<WordFrequency> frequencyList = null;
+	    List<WordFrequency> frequencyList = null;
+		FrequencyFileLoader loader = new FrequencyFileLoader();
+		boolean once = true;
 	    for(Path cloud_path : cloudpaths)
 	    {	
     		if(!cloud_path.equals(cloud))
     			{
     				if(cloud_path.toString().contains("csv") && !cloud_path.toString().contains("crc"))
     				{
-    					FrequencyFileLoader loader = new FrequencyFileLoader();
     					try {
-    						frequencyList = loader.load(cloud_path.toFile());
+    						if(once) {
+        						frequencyList = loader.load(cloud_path.toFile());
+        						once = false;
+    						}
+    						else {
+    							frequencyList.addAll(loader.load(cloud_path.toFile()));
+    						}
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
-    					final Dimension dimension = new Dimension(768, 624);
-    			        final WordCloud wordCloud = new WordCloud(dimension, CollisionMode.PIXEL_PERFECT);
-    			        wordCloud.setPadding(2);
-    			        try {
-							wordCloud.setBackground(new PixelBoundaryBackground(cloud_picture.toString()));
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-    			        wordCloud.setColorPalette(new ColorPalette(new Color(0x4055F1), new Color(0x408DF1), new Color(0x40AAF1), new Color(0x40C5F1), new Color(0x40D3F1), new Color(0xFFFFFF)));
-    			        wordCloud.setFontScalar(new LinearFontScalar(20, 50)); //Verändert die Größe der Schrift
-    			        wordCloud.build(frequencyList);
-    			        wordCloud.writeToFile(cloud.toString()+ "result.png"); //Output Dir.
-    			        break;
+
     				}
     			}
-	 }
+	    }
+		final Dimension dimension = new Dimension(768, 624);
+        final WordCloud wordCloud = new WordCloud(dimension, CollisionMode.PIXEL_PERFECT);
+        wordCloud.setPadding(2);
+        try {
+			wordCloud.setBackground(new PixelBoundaryBackground(cloud_picture.toString()));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+        wordCloud.setColorPalette(new ColorPalette(new Color(0x4055F1), new Color(0x408DF1), new Color(0x40AAF1), new Color(0x40C5F1), new Color(0x40D3F1), new Color(0xFFFFFF)));
+        wordCloud.setFontScalar(new LinearFontScalar(20, 50)); //Verändert die Größe der Schrift
+        wordCloud.build(frequencyList);
+        wordCloud.writeToFile(cloud.toString()+ "result.png"); //Output Dir.
 	 }
 
 	 public static void runtime(long unixstart) {
@@ -1080,25 +1093,21 @@ public class Sentimental {
 	    			Dataset<Row> zu_pruefen = sparkSession.read().option("inferSchema", true).json(input_path.toString()); //Pfad und name der einzulesenden Dateien hier "Datei(i).json"
 	    			zu_pruefen.createOrReplaceTempView("zu_pruefen_view");
 	    			filterdatei = sparkSession.sql("Select * from zu_pruefen_view , filter_liste WHERE zu_pruefen_view.extended_tweet.full_text LIKE ('%' || ' ' || filter_liste.term || ' ' || '%') ");  //pruefen auf enthalten der Filterliste
-	    			filterdatei.write().json(split_Dir.toString() + "//" + Integer.toString(y));			//Output der gefilterten Datei, auf welche die sentimentanalyse ausgeführt wird
+	    			filterdatei.write().json(temp_Dir_3.toString() + "//" + Integer.toString(y));			//Output der gefilterten Datei, auf welche die sentimentanalyse ausgeführt wird
 	    			System.out.println(y);
 				y++;	
-	    			try {
-						Files.delete(input_path);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
 				}
 		    }
 		    sparkSession.close();
 		 }
+		 
 	
-	 public static void meta_delete_hatecloud() 
+		 public static void meta_delete_hatecloud() 
 	 {
 		 int i = 1;
 		 Stream<Path> a_stream = null;
 		 try {
-			 a_stream = Files.walk(split_Dir);
+			 a_stream = Files.walk(temp_Dir_3);
 		} 
 		 catch (IOException e6) 
 		{
@@ -1111,7 +1120,7 @@ public class Sentimental {
  	    Path[] a_array = Arrays.copyOf(a_array_temp, a_array_temp.length, Path[].class);
 	    for(Path d : a_array)  			//alle metadateien werden gelöscht die zu pruefenden dateien werden umbenannt in einem inkrementierenden schema
 	    {			
-			if(!d.equals(split_Dir))
+			if(!d.equals(temp_Dir_3))
 			{
 	    		if(d.toString().contains(".crc") || d.toString().contains("_SUCCESS") ) 
 	    		{
@@ -1131,7 +1140,7 @@ public class Sentimental {
 		    		try 
 		    		{
 						filecount++;
-						Files.move(d, Paths.get(split_Dir.toString() + "//" + Integer.toString((int)Math.ceil(filecount/4)) + "_Datei_" + Integer.toString(i) +".json"),StandardCopyOption.REPLACE_EXISTING);
+						Files.move(d, Paths.get(temp_Dir_3.toString() + "//" + Integer.toString((int)Math.ceil(filecount/4)) + "_Datei_" + Integer.toString(i) +".json"),StandardCopyOption.REPLACE_EXISTING);
 						i++;
 		    		} 
 		    		catch (IOException e1) 
@@ -1144,7 +1153,7 @@ public class Sentimental {
 			}
 	    }
 		try {
-			 a_stream = Files.walk(split_Dir);
+			 a_stream = Files.walk(temp_Dir_3);
 		} 
 		 catch (IOException e6) 
 		{
@@ -1157,7 +1166,7 @@ public class Sentimental {
  	    a_array = Arrays.copyOf(a_array_temp, a_array_temp.length, Path[].class);
 	    for(Path d : a_array)
 	    {
-	    	if(d != null && !d.toString().contains(".json") && !d.equals(split_Dir) )
+	    	if(d != null && !d.toString().contains(".json") && !d.equals(temp_Dir_3) )
 	    	{
 	    		try 
 	    		{
@@ -1170,6 +1179,6 @@ public class Sentimental {
 	    	}
 	    }
 	 }
-			 
+	 
 }
 
