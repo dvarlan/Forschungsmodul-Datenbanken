@@ -85,7 +85,7 @@ public class Sentimental {
 	    System.setProperty("illegal-access", "permit");
 	    SparkSession sparkSession = SparkSession.builder().config(sparkConf).getOrCreate();
 	    Stream<Path> paths = null;
-	    public static Path cloud_Dir = null;
+	    Path cloud_Dir = null;
 	    if(version == 1) {
 		    cloud_Dir = split_Dir;
 	    }
