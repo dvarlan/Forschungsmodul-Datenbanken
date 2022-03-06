@@ -78,7 +78,7 @@ public class Sentimental {
 		System.out.println("Detected Hate Tweets: " + hate_tweets);
 	 }
 
-	 public static void wordClouds(version i) {
+	 public static void wordClouds(int version) {
 		SparkConf sparkConf = new SparkConf().setAppName("Word_Cloud");
 		sparkConf.set("spark.sql.optimizer.maxIterations", "300000");
 	    sparkConf.setMaster("local[*]");
