@@ -144,7 +144,7 @@ public class Sentimental {
 		}
 		Object[] cloudarray = cloud_stream.toArray();
 	    Path[] cloudpaths = Arrays.copyOf(cloudarray, cloudarray.length, Path[].class);
-	    List<WordFrequency> frequencyList = null;
+	    java.util.List<WordFrequency> frequencyList = null;
 		FrequencyFileLoader loader = new FrequencyFileLoader();
 		boolean once = true;
 	    for(Path cloud_path : cloudpaths)
