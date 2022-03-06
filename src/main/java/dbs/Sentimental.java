@@ -78,15 +78,15 @@ public class Sentimental {
 		System.out.println("Detected Hate Tweets: " + hate_tweets);
 	 }
 
-	 public static void wordClouds(int i) {
+	 public static void wordClouds(version i) {
 		SparkConf sparkConf = new SparkConf().setAppName("Word_Cloud");
 		sparkConf.set("spark.sql.optimizer.maxIterations", "300000");
 	    sparkConf.setMaster("local[*]");
 	    System.setProperty("illegal-access", "permit");
 	    SparkSession sparkSession = SparkSession.builder().config(sparkConf).getOrCreate();
 	    Stream<Path> paths = null;
-	    public static Path cloud_Dir;
-	    if(i == 1) {
+	    public static Path cloud_Dir = null;
+	    if(version == 1) {
 		    cloud_Dir = split_Dir;
 	    }
 		 else
