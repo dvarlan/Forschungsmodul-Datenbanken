@@ -45,7 +45,7 @@ public class Sentimental {
 	 public static void main(String[] args) {
 		if(args.length > 0 && args[0].equals("cloud"))
 		   {
-			   wordClouds();
+			   wordClouds(1);
 			   return;
 		   }
 		 if(args.length > 0 && args[0].equals("hatecloud"))
@@ -56,7 +56,7 @@ public class Sentimental {
 			}
 			cross_reference_as_Json();
 			meta_delete_hatecloud();
-			wordClouds();
+			wordClouds(2);
 			try {
 				Files.move(Paths.get(cloud.toString()+ "result.png"),Paths.get(cloud.toString() + "hatecloud.png"));
 			} catch (IOException e) {
@@ -78,18 +78,26 @@ public class Sentimental {
 		System.out.println("Detected Hate Tweets: " + hate_tweets);
 	 }
 
-	 public static void wordClouds() {
+	 public static void wordClouds(int i) {
 		SparkConf sparkConf = new SparkConf().setAppName("Word_Cloud");
 		sparkConf.set("spark.sql.optimizer.maxIterations", "300000");
 	    sparkConf.setMaster("local[*]");
 	    System.setProperty("illegal-access", "permit");
 	    SparkSession sparkSession = SparkSession.builder().config(sparkConf).getOrCreate();
 	    Stream<Path> paths = null;
+	    public static Path cloud_Dir;
+	    if(i == 1) {
+		    cloud_Dir = split_Dir;
+	    }
+		 else
+		 {
+		    cloud_Dir = temp_Dir_3;
+		 }
 	    Dataset<Row> hashtags;
 	    RelationalGroupedDataset grouped_table;
 		try 
 		{
-			paths = Files.walk(temp_Dir_3);
+			paths = Files.walk(cloud_Dir);
 		} 
 		catch (IOException e7) 
 		{
@@ -107,7 +115,7 @@ public class Sentimental {
 	    for(Path input_path : inputs)
 	    {	
 	    	System.out.println("working");
-    		if(!input_path.equals(temp_Dir_3))
+    		if(!input_path.equals(cloud_Dir))
     		{
     			hashtags = sparkSession.read().option("inferSchema", true).json(input_path.toString()); //Pfad und name der einzulesenden Dateien hier "Datei(i).json"
     			hashtags = hashtags.select(hashtags.col("extended_tweet.entities.hashtags.text")).where(hashtags.col("extended_tweet.entities.hashtags").isNotNull().and(hashtags.col("extended_tweet.entities.hashtags.text").getItem(0).$greater("")));
