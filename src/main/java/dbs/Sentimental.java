@@ -668,7 +668,6 @@ public class Sentimental {
 								temp = temp.concat("\n");
 								try {
 								zeit =  Long.parseLong(temp2);
-								return true;
 							    	} catch (NumberFormatException e) {
 								break;
 							   	 }
