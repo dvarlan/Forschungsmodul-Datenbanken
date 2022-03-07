@@ -613,12 +613,12 @@ public class Sentimental {
 			 System.out.println("Debug3");
 			 System.exit(9);
 		}
-		java.util.List<FileWriter> writers = new ArrayList<FileWriter>();
+		List<FileWriter> writers = new ArrayList<FileWriter>();
 		
 		for (int i = 0; i <= 46; i++) {
 		    FileWriter w;
 			try {
-				w = new FileWriter(input_Dir.toString() + "//" + Integer.toString(i));
+				w = new FileWriter(temp_Dir_3.toString() + "//" + Integer.toString(i));
 			    writers.add(w);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -652,14 +652,15 @@ public class Sentimental {
 						 temp = scan.nextLine(); 
 						 try {
 							if(temp.length() > 14) 
-							{
+							{	
 								temp2 = temp.substring(temp.length() - 15, temp.length()).replaceAll("\"}","");
 								temp = temp.substring(14, temp.length() - 33);
 								temp = temp.concat("\n");
+								System.out.println(temp2);
 								try {
 								zeit =  Long.parseLong(temp2);
 							    	} catch (NumberFormatException e) {
-								break;
+								continue;
 							   	 }
 								zeit -= 1623436200000L;
 								if (zeit < 0L) {
@@ -860,17 +861,19 @@ public class Sentimental {
 					 scan.close();
 					 x.toFile().delete();
 			 }
-	    }
+	   	 }
 	    }
 	    
-	    for(FileWriter w : writers) {
+	   	for(FileWriter w : writers) {
 	    	try {
 				w.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-	 }
- }
+		 }
+ 	}
+	
+	
 	 public static String match_matches(String c) {
 		 c = c.replace(".txt", "");
 		 int a = Integer.parseInt(c);
