@@ -69,13 +69,13 @@ public class Sentimental {
 		cross_reference();		
 		meta_delete();		//dateien verbleiben danach in temp_Dir_1
 		trim();			//dateien danach in input_Dir
-		//analyse_sentiment();	//dateien danach in temp_Dir_3
-		//move_negatives();	//dateien danach in negatives
-		//write_result();
+		analyse_sentiment();	//dateien danach in temp_Dir_3
+		move_negatives();	//dateien danach in negatives
+		write_result();
 	    	runtime(unixstart);
 	    	//System.out.println(((int) ((tweet_counter) / hate_tweets!=0?hate_tweets:1)) + "%");
-		//System.out.println("Tweets: " + tweet_counter);
-		//System.out.println("Detected Hate Tweets: " + hate_tweets);
+		System.out.println("Tweets: " + tweet_counter);
+		System.out.println("Detected Hate Tweets: " + hate_tweets);
 	 }
 
 	 public static void wordClouds(int version) {
@@ -656,7 +656,6 @@ public class Sentimental {
 								temp2 = temp.substring(temp.length() - 15, temp.length()).replaceAll("\"}","");
 								temp = temp.substring(14, temp.length() - 33);
 								temp = temp.concat("\n");
-								System.out.println(temp2);
 								try {
 								zeit =  Long.parseLong(temp2);
 							    	} catch (NumberFormatException e) {
