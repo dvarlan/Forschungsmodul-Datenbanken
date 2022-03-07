@@ -71,7 +71,7 @@ public class Sentimental {
 		trim();			//dateien danach in input_Dir
 		analyse_sentiment();	//dateien danach in temp_Dir_3
 		move_negatives();	//dateien danach in negatives
-		write_result();
+		//write_result();
 	    	runtime(unixstart);
 	    	//System.out.println(((int) ((tweet_counter) / hate_tweets!=0?hate_tweets:1)) + "%");
 		//System.out.println("Tweets: " + tweet_counter);
