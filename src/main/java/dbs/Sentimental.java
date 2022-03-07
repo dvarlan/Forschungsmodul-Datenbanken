@@ -598,17 +598,7 @@ public class Sentimental {
 					e.printStackTrace();
 				}
     		}
-    	}	  
-	    try 
-	    {
-	    	result.close();
-		} 
-	    catch (IOException e6) 
-	    {
-	    	e6.printStackTrace();
-			System.out.println("Debug13");
-			System.exit(9);
-		}
+    		}	  
 	 }
 	 
 	 public static void trim()
