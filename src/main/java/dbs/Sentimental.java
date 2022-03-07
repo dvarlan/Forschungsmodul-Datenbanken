@@ -417,7 +417,7 @@ public class Sentimental {
 		 Stream<Path> e_stream = null;
 		 try 
 		 {
-			e_stream = Files.walk(input_Dir);
+			e_stream = Files.walk(temp_Dir_3);
 		 } 
 		 catch (IOException e5) 
 		 {
@@ -430,7 +430,7 @@ public class Sentimental {
 		 Path[] e_array = Arrays.copyOf(e_array_temp, e_array_temp.length, Path[].class);
 		 for(Path f : e_array)			// Die sentimentanalyse wird ausgeführt 
 		 {	
-			 if(!f.equals(input_Dir))
+			 if(!f.equals(temp_Dir_3))
 			 {		
 				 props.setProperty("file", f.toString());
 				 try 
