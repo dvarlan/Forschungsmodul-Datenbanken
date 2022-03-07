@@ -225,14 +225,14 @@ public class Sentimental {
     			{
     			Dataset<Row> zu_pruefen = sparkSession.read().option("inferSchema", true).json(input_path.toString()); //Pfad und name der einzulesenden Dateien hier "Datei(i).json"
     			zu_pruefen.createOrReplaceTempView("zu_pruefen_view");
-    			filterdatei = sparkSession.sql("Select extended_tweet.full_text from zu_pruefen_view , filter_liste WHERE zu_pruefen_view.extended_tweet.full_text LIKE ('%' || ' ' || filter_liste.term || ' ' || '%') ");  //pruefen auf enthalten der Filterliste
+    			filterdatei = sparkSession.sql("Select extended_tweet.full_text, timestamp_ms from zu_pruefen_view , filter_liste WHERE zu_pruefen_view.extended_tweet.full_text LIKE ('%' || ' ' || filter_liste.term || ' ' || '%') ");  //pruefen auf enthalten der Filterliste
     			filterdatei = filterdatei.dropDuplicates();
-			filterdatei.write().json(temp_Dir_1.toString() + "//" + Integer.toString(y));			//Output der gefilterten Datei, auf welche die sentimentanalyse ausgeführt wird
-    			System.out.println(y);
-			y++;	
+    			filterdatei.write().json(temp_Dir_1.toString() + "//" + Integer.toString(y));			//Output der gefilterten Datei, auf welche die sentimentanalyse ausgeführt wird
+				y++;	
     			try {
 					Files.delete(input_path);
 				} catch (IOException e) {
+					System.out.println("error deleting in cross referencing");
 					e.printStackTrace();
 				}
 			}
