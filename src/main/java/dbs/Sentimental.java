@@ -68,7 +68,7 @@ public class Sentimental {
 		split();
 		cross_reference();		
 		meta_delete();		//dateien verbleiben danach in temp_Dir_1
-		//trim();			//dateien danach in input_Dir
+		trim();			//dateien danach in input_Dir
 		//analyse_sentiment();	//dateien danach in temp_Dir_3
 		//move_negatives();	//dateien danach in negatives
 		//write_result();
