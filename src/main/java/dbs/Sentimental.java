@@ -666,7 +666,12 @@ public class Sentimental {
 								temp2 = temp.substring(temp.length() - 15, temp.length()).replaceAll("\"}","");
 								temp = temp.substring(14, temp.length() - 33);
 								temp = temp.concat("\n");
+								try {
 								zeit =  Long.parseLong(temp2);
+								return true;
+							    	} catch (NumberFormatException e) {
+								break;
+							   	 }
 								zeit -= 1623436200000L;
 								if (zeit < 0L) {
 									writers.get(45).write(temp);
