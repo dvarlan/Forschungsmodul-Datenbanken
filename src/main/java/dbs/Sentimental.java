@@ -550,7 +550,7 @@ public class Sentimental {
 			 if(!h.equals(negatives))
 			 {
 				 try {
-						result = new FileWriter( result_Dir.toString() + "//" + match_matches(h.toString().substring(negatives.toString().length()+1))+".json");
+						result = new FileWriter( result_Dir.toString() + "//" + match_matches(h.toString().substring(negatives.toString().length()+1))+".json",true);
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					}
