@@ -37,8 +37,8 @@ public class Sentimental {
 	public static String neg = "sentiment: Negative):";
 	public static String veryneg = "sentiment: Very Negative):";
 	public static Scanner scan;
-	public static long tweet_counter = 0;
-	public static long hate_tweets = 0;
+	public static long[] tweet_counter = new long[50];
+	public static long[] hate_tweets = new long[50];
 	public static Path cloud = Paths.get("/home/ubuntu/cloud/");
    	public static Path cloud_picture = Paths.get("/home/ubuntu/picture/picture.png");
 	
@@ -73,11 +73,14 @@ public class Sentimental {
 		move_negatives();	//dateien danach in negatives
 		write_result();
 	    	runtime(unixstart);
-	    	//System.out.println(((int) ((tweet_counter) / hate_tweets!=0?hate_tweets:1)) + "%");
-		System.out.println("Tweets: " + tweet_counter);
-		System.out.println("Detected Hate Tweets: " + hate_tweets);
+		tweet_percentage();
 	 }
 
+	public static void tweet_percentage();
+	{
+		return;
+	}
+	
 	 public static void wordClouds(int version) {
 		SparkConf sparkConf = new SparkConf().setAppName("Word_Cloud");
 		sparkConf.set("spark.sql.optimizer.maxIterations", "300000");
