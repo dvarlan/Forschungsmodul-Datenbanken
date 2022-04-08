@@ -373,7 +373,6 @@ public class Sentimental {
 	 					{
 	 						splitter.write(tweetscanner.nextLine() + "\n");
 	 						i++;
-	 						tweet_counter++;
 	 					}
 	 					x++;
 					} 
@@ -576,7 +575,6 @@ public class Sentimental {
 						 {
 							 temp_string = scan.nextLine().replace("{\"text\":\"", "").replace("”\"}", "").replace("\"}","").trim();
 							 if(temp_string.length()>1) result.write( temp_string + "\n");
-							 hate_tweets++;
 						 } 
 						 catch (Exception e5) 
 						 {
