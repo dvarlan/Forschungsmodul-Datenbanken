@@ -73,13 +73,13 @@ public class Sentimental {
 		move_negatives();	//dateien danach in negatives
 		write_result();
 	    	runtime(unixstart);
-		tweet_percentage();
+		//tweet_percentage();
 	 }
 
-	public static void tweet_percentage();
-	{
-		return;
-	}
+	//public static void tweet_percentage();
+	//{
+	//	return;
+	//}
 	
 	 public static void wordClouds(int version) {
 		SparkConf sparkConf = new SparkConf().setAppName("Word_Cloud");
