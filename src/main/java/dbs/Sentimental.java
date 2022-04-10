@@ -128,6 +128,7 @@ public class Sentimental {
 		for(int i = 0; i < hate_tweets.length && i < tweet_counter.length; i++)
 		{ 
 			 	try {
+					 System.out.println(tweet_counter[i]);
 					 	if(tweet_counter[i] != 0)
 						 {
 							 percent = hate_tweets[i]/tweet_counter[i];
