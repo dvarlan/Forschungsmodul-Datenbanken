@@ -39,6 +39,7 @@ public class Sentimental {
 	public static Scanner scan;
 	public static long[] tweet_counter = new long[47];
 	public static long[] hate_tweets = new long[47];
+	public static long[] real_hate = new long[47];
 	public static Path cloud = Paths.get("/home/ubuntu/cloud/");
    	public static Path cloud_picture = Paths.get("/home/ubuntu/picture/picture.png");
 	
@@ -64,17 +65,29 @@ public class Sentimental {
 			}
 			return;
 		 }
+		BufferedWriter timer = null;
+ 		try {
+			timer = new BufferedWriter(new FileWriter( result_Dir.toString() + "//" + "times.csv",true));
+			try{
+				timer.write("Timestamp"+"\n");
+			} catch (IOException e2) { 
+				e2.printStackTrace();
+				}
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 		long unixstart = Instant.now().getEpochSecond();
 		count_all_tweets();
 		split();
 		cross_reference();		
 		meta_delete();		//dateien verbleiben danach in temp_Dir_1
-		trim();			//dateien danach in input_Dir
+		trim(timer);			//dateien danach in input_Dir
 		analyse_sentiment();	//dateien danach in temp_Dir_3
 		move_negatives();	//dateien danach in negatives
 		write_result();
-	    	runtime(unixstart);
+	    runtime(unixstart);
 		tweet_percentage();
+
 	 }
 
 	public static void count_all_tweets() 
@@ -141,7 +154,7 @@ public class Sentimental {
 							 percent = -1;
 						 }
 						//frequency.write("\t hate tweets:" + Long.toString(hate_tweets[i]) + "\t all tweets:" + Long.toString(tweet_counter[i]) + "\t Prozentual: "+ percent);
-						frequency.write(match_matches(String.valueOf(i)) +"\t hate tweets:" + Long.toString(hate_tweets[i]) + "\t all tweets:" + Long.toString(tweet_counter[i]) + "\t Prozentual: "+ percent + "\n");
+						frequency.write(match_matches(String.valueOf(i)) +"\t hate tweets:" + Long.toString(hate_tweets[i]) + "\t sentimen hate tweets: " + Long.toString(real_hate[i]) + "\t all tweets:" + Long.toString(tweet_counter[i]) + "\t Prozentual: "+ percent + "\n");
 					} catch (IOException ioe) {
 						System.out.println("ERROR FFS");
 						ioe.printStackTrace();
@@ -630,6 +643,8 @@ public class Sentimental {
 		 }
 		 Object[] negatives_array_temp = negatives_stream.toArray();
 		 negatives_stream.close();
+		 String c;
+		 int a;
 		 Path[] negatives_array = Arrays.copyOf(negatives_array_temp, negatives_array_temp.length, Path[].class);
 		 for(Path h : negatives_array)
 		 {
@@ -660,6 +675,13 @@ public class Sentimental {
 						 {
 							 temp_string = scan.nextLine().replace("{\"text\":\"", "").replace("”\"}", "").replace("\"}","").trim();
 							 if(temp_string.length()>1) result.write( temp_string + "\n");
+							 	c = h.toString().substring(negatives.toString().length()+1);
+									  if(c.contains("txt"))
+										{
+											c = c.replace(".txt", "");
+										}
+										a = Integer.parseInt(c);
+							 real_hate[a] == real_hate[a] + 1;
 						 } 
 						 catch (Exception e5) 
 						 {
@@ -687,7 +709,7 @@ public class Sentimental {
     		}	  
 	 }
 	 
-	 public static void trim()
+	 public static void trim(BufferedWriter zeitWriter)
 	 {
 		 Stream<Path> trim_stream = null;
 		 try {
@@ -742,6 +764,11 @@ public class Sentimental {
 								temp2 = temp.substring(temp.length() - 15, temp.length()).replaceAll("\"}","");
 								temp = temp.substring(14, temp.length() - 33);
 								temp = temp.concat("\n");
+								try {
+									zeitWriter.write(zeit);
+								} catch (IoException e) {
+									e.printStackTrace();
+								}
 								try {
 								zeit =  Long.parseLong(temp2);
 							    	} catch (NumberFormatException e) {
@@ -995,7 +1022,16 @@ public class Sentimental {
 			 }
 	   	 }
 	    }
-	    
+	    				try {
+			frequency.flush();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		try {
+			frequency.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	   	for(FileWriter w : writers) {
 	    	try {
 				w.close();
