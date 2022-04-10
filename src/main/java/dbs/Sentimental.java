@@ -125,8 +125,13 @@ public class Sentimental {
 		e1.printStackTrace();
 	}
 		for(int i = 0; i < hate_tweets.length && i < tweet_counter.length; i++)
-		{
-			frequency.write(match_matches(String.valueOf(i)) +"\t hate tweets:" + String.valueOf(hate_tweets[i]) + "\t all tweets:" + String.valueOf(tweet_counter[i]) + "\t Prozentual: "+ hate_tweets[i]/tweet_counter[i]);
+		{ 
+			 	try {
+						frequency.write(match_matches(String.valueOf(i)) +"\t hate tweets:" + String.valueOf(hate_tweets[i]) + "\t all tweets:" + String.valueOf(tweet_counter[i]) + "\t Prozentual: "+ hate_tweets[i]/tweet_counter[i]);
+					} catch (IOException e1) 
+				{
+				e1.printStackTrace();
+				}
 		}
 	}
 	
