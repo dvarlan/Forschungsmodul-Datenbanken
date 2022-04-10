@@ -109,7 +109,7 @@ public class Sentimental {
 			java.util.List<Row> liste = counting.select("Anzahl").collectAsList();
 			for(int i = 0;  i < tweet_counter.length; i++)
 				{
-					tweet_counter[i] = tweet_counter[i] + liste.get(i);
+					tweet_counter[i] = tweet_counter[i] + liste.get(i).getInt(i);
 				}
 		}
 	}
@@ -125,7 +125,7 @@ public class Sentimental {
 	}
 		for(int i = 0; i < hate_tweets.length && i < tweet_counter.length; i++)
 		{
-			frequency.write(match_matches(String.valueOf(i)) +"\t hate tweets:" + String.valueOf(hate_tweets[i]) + "\t all tweets:" + string.valueOf(tweet_counter[i]) + "\t Prozentual: "+ hate_tweets[i]/tweet_counter[i]);
+			frequency.write(match_matches(String.valueOf(i)) +"\t hate tweets:" + String.valueOf(hate_tweets[i]) + "\t all tweets:" + String.valueOf(tweet_counter[i]) + "\t Prozentual: "+ hate_tweets[i]/tweet_counter[i]);
 		}
 	}
 	
