@@ -65,6 +65,7 @@ public class Sentimental {
 			return;
 		 }
 		long unixstart = Instant.now().getEpochSecond();
+		count_all_tweets();
 		split();
 		cross_reference();		
 		meta_delete();		//dateien verbleiben danach in temp_Dir_1
@@ -76,6 +77,10 @@ public class Sentimental {
 		tweet_percentage();
 	 }
 
+	public static void count_all_tweets() 
+	{
+		
+	}
 	public static void tweet_percentage();
 	{
  	try {
