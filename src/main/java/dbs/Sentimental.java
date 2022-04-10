@@ -109,7 +109,7 @@ public class Sentimental {
 			java.util.List<Row> liste = counting.select("Anzahl").collectAsList();
 			for(int i = 0;  i < tweet_counter.length; i++)
 				{
-					tweet_counter[i] = tweet_counter[i] + liste.get(i).getInt(0);
+					tweet_counter[i] = tweet_counter[i] + Integer.toUnsignedLong(liste.get(i).getInt(0));
 				}
 		}
 	}
