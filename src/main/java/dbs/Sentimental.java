@@ -109,7 +109,7 @@ public class Sentimental {
 			java.util.List<Row> liste = counting.select("Anzahl").collectAsList();
 			for(int i = 0;  i < tweet_counter.length; i++)
 				{
-					tweet_counter[i] = tweet_counter[i] + liste.get(i).getInt(i);
+					tweet_counter[i] = tweet_counter[i] + liste.get(i).getInt(0);
 				}
 		}
 	}
@@ -118,8 +118,9 @@ public class Sentimental {
 		
 	public static void tweet_percentage()
 	{
+		FileWriter frequency = null;
  	try {
-		FileWriter frequency = new FileWriter( result_Dir.toString() + "//" + "frequency",true);
+		frequency = new FileWriter( result_Dir.toString() + "//" + "frequency",true);
 	} catch (IOException e1) {
 		e1.printStackTrace();
 	}
