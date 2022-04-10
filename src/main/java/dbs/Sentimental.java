@@ -118,6 +118,7 @@ public class Sentimental {
 		
 	public static void tweet_percentage()
 	{
+		float percent;
 		FileWriter frequency = null;
  	try {
 		frequency = new FileWriter( result_Dir.toString() + "//" + "frequency",true);
@@ -127,7 +128,16 @@ public class Sentimental {
 		for(int i = 0; i < hate_tweets.length && i < tweet_counter.length; i++)
 		{ 
 			 	try {
-						frequency.write(match_matches(String.valueOf(i)) +"\t hate tweets:" + String.valueOf(hate_tweets[i]) + "\t all tweets:" + String.valueOf(tweet_counter[i]) + "\t Prozentual: "+ hate_tweets[i]/tweet_counter[i]);
+					 	if(tweet_counter[i] != 0)
+						 {
+							 percent = hate_tweets[i]/tweet_counter[i];
+						 }
+						 else
+						 {
+							 percent = -1;
+						 }
+
+						frequency.write(match_matches(String.valueOf(i)) +"\t hate tweets:" + String.valueOf(hate_tweets[i]) + "\t all tweets:" + String.valueOf(tweet_counter[i]) + "\t Prozentual: "+ percent);
 					} catch (IOException e1) 
 				{
 				e1.printStackTrace();
