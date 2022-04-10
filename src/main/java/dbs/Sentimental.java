@@ -107,7 +107,7 @@ public class Sentimental {
 			counting.createOrReplaceTempView("games");
 			counting = countSession.sql("Select Spiel, count(*) AS Anzahl from games Group BY Spiel ORDER BY Spiel ASC");
 			java.util.List<Row> liste = counting.select("Anzahl").collectAsList();
-			for(int i = 0;  i < tweet_counter.length; i++)
+			for(int i = 0;  i < tweet_counter.length && i < liste.size(); i++)
 				{
 					tweet_counter[i] = tweet_counter[i] + liste.get(i).getLong(0);
 				}
