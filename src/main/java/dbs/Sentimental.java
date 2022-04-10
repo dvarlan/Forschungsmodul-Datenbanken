@@ -133,7 +133,7 @@ public class Sentimental {
 					 	if(tweet_counter[i] != 0)
 						 {
 							 //percent = hate_tweets[i]/tweet_counter[i];
-							 int percent = (int)(hate_tweets[i] * 100.0 /tweet_counter[i] + 0.5);
+							 percent = (int)(hate_tweets[i] * 100.0 /tweet_counter[i] + 0.5);
 
 						 }
 						 else
