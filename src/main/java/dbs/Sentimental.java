@@ -118,7 +118,7 @@ public class Sentimental {
 		
 	public static void tweet_percentage()
 	{
-		float percent;
+		float percent = -1;
 		FileWriter frequency = null;
  	try {
 		frequency = new FileWriter( result_Dir.toString() + "//" + "frequency",true);
