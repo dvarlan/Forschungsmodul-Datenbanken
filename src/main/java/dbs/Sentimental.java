@@ -137,6 +137,9 @@ public class Sentimental {
 						 {
 							 percent = -1;
 						 }
+						frequency.write("TEST");
+						frequency.write(i);
+						frequency.write(hate_tweets[i]);
 						frequency.write("\t hate tweets:" + hate_tweets[i] + "\t all tweets:" + tweet_counter[i] + "\t Prozentual: "+ percent);
 						frequency.write(match_matches(String.valueOf(i)) +"\t hate tweets:" + hate_tweets[i] + "\t all tweets:" + tweet_counter[i] + "\t Prozentual: "+ percent);
 					} catch (IOException ioe) {
