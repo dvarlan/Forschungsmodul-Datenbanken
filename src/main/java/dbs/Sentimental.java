@@ -78,7 +78,15 @@ public class Sentimental {
 
 	public static void tweet_percentage();
 	{
-		return;
+ 	try {
+		frequency = new FileWriter( result_Dir.toString() + "//" + "frequency",true);
+	} catch (IOException e1) {
+		e1.printStackTrace();
+	}
+		for(int i = 0; i < hate_tweets.length && i < tweet_counter.length, i++)
+		{
+			frequency.write(match_matches(i.toString()) +"\t hate tweets:" + hate_tweets[i].toString() + "\t all tweets:" + tweet_counter[i].toString() + "\t Prozentual: "+ hate_tweets[i]/tweet_counter[i]);
+		}
 	}
 	
 	 public static void wordClouds(int version) {
@@ -923,7 +931,10 @@ public class Sentimental {
 	
 	
 	 public static String match_matches(String c) {
-		 c = c.replace(".txt", "");
+		 if(c.contains("txt")
+		    {
+		 	c = c.replace(".txt", "");
+		    }
 		 int a = Integer.parseInt(c);
 		 int i = 0;
 		 if(a == i) {
