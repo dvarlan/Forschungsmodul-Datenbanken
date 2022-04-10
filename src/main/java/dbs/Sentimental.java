@@ -137,9 +137,7 @@ public class Sentimental {
 						 {
 							 percent = -1;
 						 }
-						frequency.write("TEST");
-						frequency.write(i);
-						frequency.write("\t hate tweets:" + Long.toString(hate_tweets[i]) + "\t all tweets:" + Long.toString(tweet_counter[i]) + "\t Prozentual: "+ percent);
+						//frequency.write("\t hate tweets:" + Long.toString(hate_tweets[i]) + "\t all tweets:" + Long.toString(tweet_counter[i]) + "\t Prozentual: "+ percent);
 						frequency.write(match_matches(String.valueOf(i)) +"\t hate tweets:" + Long.toString(hate_tweets[i]) + "\t all tweets:" + Long.toString(tweet_counter[i]) + "\t Prozentual: "+ percent);
 					} catch (IOException ioe) {
 						System.out.println("ERROR FFS");
@@ -151,6 +149,17 @@ public class Sentimental {
 								e11.printStackTrace();
 							}
 					}
+
+		}
+				try {
+			frequency.flush();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		try {
+			frequency.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 	
