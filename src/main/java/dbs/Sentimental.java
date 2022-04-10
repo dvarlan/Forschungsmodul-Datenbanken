@@ -107,9 +107,10 @@ public class Sentimental {
 			counting.createOrReplaceTempView("games");
 			counting = countSession.sql("Select Spiel, count(*) AS Anzahl from games Group BY Spiel ORDER BY Spiel ASC");
 			java.util.List<Row> liste = counting.select("Anzahl").collectAsList();
+			java.util.List<Row> listezwei = counting.select("Spiel").collectAsList();
 			for(int i = 0;  i < tweet_counter.length && i < liste.size(); i++)
 				{
-					tweet_counter[i] = tweet_counter[i] + liste.get(i).getLong(0);
+					tweet_counter[listezwei.get(i).getInt(0)] = tweet_counter[listezwei.get(i).getInt(0)] + liste.get(i).getLong(0);
 				}
 		}
 	}
@@ -144,7 +145,7 @@ public class Sentimental {
 						ioe.printStackTrace();
 						try
 							{
-								frequency.write("\t hate tweets:" + Long.toString(hate_tweets[i]) + "\t all tweets:" + Long.toString(tweet_counter[i]) + "\t Prozentual: "+ percent);
+								frequency.write("\t hate tweets:" + Long.toString(hate_tweets[i]) + "\t all tweets:" + Long.toString(tweet_counter[i]) + "\t Prozentual: "+ percent + "\n");
 							} catch (IOException e11) {
 								e11.printStackTrace();
 							}
