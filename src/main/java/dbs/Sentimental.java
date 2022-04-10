@@ -94,7 +94,8 @@ public class Sentimental {
 	}
 	Object[] count_array_temp = count_stream.toArray();
 	count_stream.close();
-	long y;
+	Long y;
+	Integer c;
 	Path[] count_array = Arrays.copyOf(count_array_temp, count_array_temp.length, Path[].class);
 	for(Path tweets : count_array)
 	{
@@ -110,7 +111,8 @@ public class Sentimental {
 			java.util.List<Row> liste = counting.select("Anzahl").collectAsList();
 			for(int i = 0;  i < tweet_counter.length; i++)
 				{
-					y = new long(liste.get(i).getInt(0));
+					c = liste.get(i).getInt(0);
+					y = c.longValue();
 					tweet_counter[i] = tweet_counter[i] + y;
 				}
 		}
