@@ -765,8 +765,8 @@ public class Sentimental {
 								temp = temp.substring(14, temp.length() - 33);
 								temp = temp.concat("\n");
 								try {
-									zeitWriter.write(zeit);
-								} catch (IoException e) {
+									zeitWriter.write(temp2);
+								} catch (IOException e) {
 									e.printStackTrace();
 								}
 								try {
@@ -1023,12 +1023,12 @@ public class Sentimental {
 	   	 }
 	    }
 	    				try {
-			frequency.flush();
+			zeitWriter.flush();
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 		try {
-			frequency.close();
+			zeitWriter.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
