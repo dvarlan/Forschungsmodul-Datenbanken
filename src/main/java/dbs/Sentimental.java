@@ -73,13 +73,13 @@ public class Sentimental {
 		move_negatives();	//dateien danach in negatives
 		write_result();
 	    	runtime(unixstart);
-		//tweet_percentage();
+		tweet_percentage();
 	 }
 
-	//public static void tweet_percentage();
-	//{
-	//	return;
-	//}
+	public static void tweet_percentage();
+	{
+		return;
+	}
 	
 	 public static void wordClouds(int version) {
 		SparkConf sparkConf = new SparkConf().setAppName("Word_Cloud");
@@ -664,191 +664,238 @@ public class Sentimental {
 							   	 }
 								zeit -= 1623436200000L;
 								if (zeit < 0L) {
-									writers.get(45).write(temp);
+									writers.get(45).write(temp); 
+ 									hate_tweets[45] = hate_tweets[45] + 1;
 								}
 								else if(zeit >= 0L && zeit < 12600000L)
 								{
-									writers.get(0).write(temp);
+									writers.get(0).write(temp); 
+ 									hate_tweets[0] = hate_tweets[0] + 1;
 								}
 								else if(zeit >= 64800000L && zeit < 75600000L)
 								{
-									writers.get(1).write(temp);
+									writers.get(1).write(temp); 
+ 									hate_tweets[1] = hate_tweets[1] + 1;
 								}
 								else if(zeit >= 75600000L && zeit < 86400000L)
 								{
-									writers.get(2).write(temp);
+									writers.get(2).write(temp); 
+ 									hate_tweets[2] = hate_tweets[2] + 1;
 								}
 								else if(zeit >= 86400000L && zeit < 97200000L)
 								{
-									writers.get(3).write(temp);
+									writers.get(3).write(temp); 
+ 									hate_tweets[3] = hate_tweets[3] + 1;
 								}
 								else if(zeit >= 151200000L && zeit < 162000000L)
 								{
-									writers.get(4).write(temp);
+									writers.get(4).write(temp); 
+ 									hate_tweets[4] = hate_tweets[4] + 1;
 								}
 								else if(zeit >= 162000000L && zeit < 172800000L)
 								{
-									writers.get(5).write(temp);
+									writers.get(5).write(temp); 
+ 									hate_tweets[5] = hate_tweets[5] + 1;
 								}
 								else if(zeit >= 172800000L && zeit < 183600000L)
 								{
-									writers.get(6).write(temp);
+									writers.get(6).write(temp); 
+ 									hate_tweets[6] = hate_tweets[6] + 1;
 								}
 								else if(zeit >= 237600000L && zeit < 248400000L)
 								{
-									writers.get(7).write(temp);
+									writers.get(7).write(temp); 
+ 									hate_tweets[7] = hate_tweets[7] + 1;
 								}
 								else if(zeit >= 248400000L && zeit < 259200000L)
 								{
-									writers.get(8).write(temp);
+									writers.get(8).write(temp); 
+ 									hate_tweets[8] = hate_tweets[8] + 1;
 								}
 								else if(zeit >= 259200000L && zeit < 270000000L)
 								{
-									writers.get(9).write(temp);
+									writers.get(9).write(temp); 
+ 									hate_tweets[9] = hate_tweets[9] + 1;
 								}
 								else if(zeit >= 334800000L && zeit < 345600000L)
 								{
-									writers.get(10).write(temp);
+									writers.get(10).write(temp); 
+ 									hate_tweets[10] = hate_tweets[10] + 1;
 								}
 								else if(zeit >= 345600000L && zeit < 356400000L)
 								{
-									writers.get(11).write(temp);
+									writers.get(11).write(temp); 
+ 									hate_tweets[11] = hate_tweets[11] + 1;
 								}
 								else if(zeit >= 410400000L && zeit < 421200000L)
 								{
-									writers.get(12).write(temp);
+									writers.get(12).write(temp); 
+ 									hate_tweets[12] = hate_tweets[12] + 1;
 								}
 								else if(zeit >= 421200000L && zeit < 432000000L)
 								{
-									writers.get(13).write(temp);
+									writers.get(13).write(temp); 
+ 									hate_tweets[13] = hate_tweets[13] + 1;
 								}
 								else if(zeit >= 432000000L && zeit < 442800000L)
 								{
-									writers.get(14).write(temp);
+									writers.get(14).write(temp); 
+ 									hate_tweets[14] = hate_tweets[14] + 1;
 								}
 								else if(zeit >= 496800000L && zeit < 507600000L)
 								{
-									writers.get(15).write(temp);
+									writers.get(15).write(temp); 
+ 									hate_tweets[15] = hate_tweets[15] + 1;
 								}
 								else if(zeit >= 507600000L && zeit < 518400000L)
 								{
-									writers.get(16).write(temp);
+									writers.get(16).write(temp); 
+ 									hate_tweets[16] = hate_tweets[16] + 1;
 								}
 								else if(zeit >= 518400000L && zeit < 529200000L)
 								{
-									writers.get(17).write(temp);
+									writers.get(17).write(temp); 
+ 									hate_tweets[17] = hate_tweets[17] + 1;
 								}
 								else if(zeit >= 583200000L && zeit < 594000000L)
 								{
-									writers.get(18).write(temp);
+									writers.get(18).write(temp); 
+ 									hate_tweets[18] = hate_tweets[18] + 1;
 								}
 								else if(zeit >= 594000000L && zeit < 604800000L)
 								{
-									writers.get(19).write(temp);
+									writers.get(19).write(temp); 
+ 									hate_tweets[19] = hate_tweets[19] + 1;
 								}
 								else if(zeit >= 604800000L && zeit < 615600000L)
 								{
-									writers.get(20).write(temp);
+									writers.get(20).write(temp); 
+ 									hate_tweets[20] = hate_tweets[20] + 1;
 								}
 								else if(zeit >= 669600000L && zeit < 680400000L)
 								{
-									writers.get(21).write(temp);
+									writers.get(21).write(temp); 
+ 									hate_tweets[21] = hate_tweets[21] + 1;
 								}
 								else if(zeit >= 680400000L && zeit < 691200000L)
 								{
-									writers.get(22).write(temp);
+									writers.get(22).write(temp); 
+ 									hate_tweets[22] = hate_tweets[22] + 1;
 								}
 								else if(zeit >= 691200000L && zeit < 702000000L)
 								{
-									writers.get(23).write(temp);
+									writers.get(23).write(temp); 
+ 									hate_tweets[23] = hate_tweets[23] + 1;
 								}
 								else if(zeit >= 766800000L && zeit < 777600000L)
 								{
-									writers.get(24).write(temp);
+									writers.get(24).write(temp); 
+ 									hate_tweets[24] = hate_tweets[24] + 1;
 								}
 								else if(zeit >= 853200000L && zeit < 864000000L)
 								{
-									writers.get(25).write(temp);
+									writers.get(25).write(temp); 
+ 									hate_tweets[25] = hate_tweets[25] + 1;
 								}
 								else if(zeit >= 864000000L && zeit < 874800000L)
 								{
-									writers.get(26).write(temp);
+									writers.get(26).write(temp); 
+ 									hate_tweets[26] = hate_tweets[26] + 1;
 								}
 								else if(zeit >= 950400000L && zeit < 961200000L)
 								{
-									writers.get(27).write(temp);
+									writers.get(27).write(temp); 
+ 									hate_tweets[27] = hate_tweets[27] + 1;
 								}
 								else if(zeit >= 1026000000L && zeit < 1036800000L)
 								{
-									writers.get(28).write(temp);
+									writers.get(28).write(temp); 
+ 									hate_tweets[28] = hate_tweets[28] + 1;
 								}
 								else if(zeit >= 1036800000L && zeit < 1047600000L)
 								{
-									writers.get(29).write(temp);
+									writers.get(29).write(temp); 
+ 									hate_tweets[29] = hate_tweets[29] + 1;
 								}
 								else if(zeit >= 1285200000L && zeit < 1296000000L)
 								{
-									writers.get(30).write(temp);
+									writers.get(30).write(temp); 
+ 									hate_tweets[30] = hate_tweets[30] + 1;
 								}
 								else if(zeit >= 1296000000L && zeit < 1308000000L)
 								{
-									writers.get(31).write(temp);
+									writers.get(31).write(temp); 
+ 									hate_tweets[31] = hate_tweets[31] + 1;
 								}
 								else if(zeit >= 1371600000L && zeit < 1382400000L)
 								{
-									writers.get(32).write(temp);
+									writers.get(32).write(temp); 
+ 									hate_tweets[32] = hate_tweets[32] + 1;
 								}
 								else if(zeit >= 1382400000L && zeit < 1393200000L)
 								{
-									writers.get(33).write(temp);
+									writers.get(33).write(temp); 
+ 									hate_tweets[33] = hate_tweets[33] + 1;
 								}
 								else if(zeit >= 1458000000L && zeit < 1468800000L)
 								{
-									writers.get(34).write(temp);
+									writers.get(34).write(temp); 
+ 									hate_tweets[34] = hate_tweets[34] + 1;
 								}
 								else if(zeit >= 1468800000L && zeit < 1479600000L)
 								{
-									writers.get(35).write(temp);
+									writers.get(35).write(temp); 
+ 									hate_tweets[35] = hate_tweets[35] + 1;
 								}
 								else if(zeit >= 1544400000L && zeit < 1555200000L)
 								{
-									writers.get(36).write(temp);
+									writers.get(36).write(temp); 
+ 									hate_tweets[36] = hate_tweets[36] + 1;
 								}
 								else if(zeit >= 1555200000L && zeit < 1566000000L)
 								{
-									writers.get(37).write(temp);
+									writers.get(37).write(temp); 
+ 									hate_tweets[37] = hate_tweets[37] + 1;
 								}
 								else if(zeit >= 1803600000L && zeit < 1814400000L)
 								{
-									writers.get(38).write(temp);
+									writers.get(38).write(temp); 
+ 									hate_tweets[38] = hate_tweets[38] + 1;
 								}
 								else if(zeit >= 1814400000L && zeit < 1825200000L)
 								{
-									writers.get(39).write(temp);
+									writers.get(39).write(temp); 
+ 									hate_tweets[39] = hate_tweets[39] + 1;
 								}
 								else if(zeit >= 1890000000L && zeit < 1900800000L)
 								{
-									writers.get(40).write(temp);
+									writers.get(40).write(temp); 
+ 									hate_tweets[40] = hate_tweets[40] + 1;
 								}
 								else if(zeit >= 1900800000L && zeit < 1911600000L)
 								{
-									writers.get(41).write(temp);
+									writers.get(41).write(temp); 
+ 									hate_tweets[41] = hate_tweets[41] + 1;
 								}
 								else if(zeit >= 2160000000L && zeit < 2172000000L)
 								{
-									writers.get(42).write(temp);
+									writers.get(42).write(temp); 
+ 									hate_tweets[42] = hate_tweets[42] + 1;
 								}
 								else if(zeit >= 2246400000L && zeit < 2258400000L)
 								{
-									writers.get(43).write(temp);
+									writers.get(43).write(temp); 
+ 									hate_tweets[43] = hate_tweets[43] + 1;
 								}
 								else if(zeit >= 2592000000L && zeit < 2604000000L)
 								{
-									writers.get(44).write(temp);
+									writers.get(44).write(temp); 
+ 									hate_tweets[44] = hate_tweets[44] + 1;
 								}
 								else
 								{
-									writers.get(46).write(temp);
+									writers.get(46).write(temp); 
+ 									hate_tweets[46] = hate_tweets[46] + 1;
 
 								}
 							} 
@@ -872,6 +919,7 @@ public class Sentimental {
 			}
 		 }
  	}
+	
 	
 	
 	 public static String match_matches(String c) {
