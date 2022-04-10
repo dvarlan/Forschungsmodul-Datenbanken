@@ -140,6 +140,10 @@ public class Sentimental {
 
 						frequency.write(match_matches(String.valueOf(i)) +"\t hate tweets:" + String.valueOf(hate_tweets[i]) + "\t all tweets:" + String.valueOf(tweet_counter[i]) + "\t Prozentual: "+ percent);
 					} catch (IOException e1) 
+					{
+						System.out.println("ERROR FFS");
+						frequency.write("\t hate tweets:" + String.valueOf(hate_tweets[i]) + "\t all tweets:" + String.valueOf(tweet_counter[i]) + "\t Prozentual: "+ percent);
+					}
 				{
 				e1.printStackTrace();
 				}
