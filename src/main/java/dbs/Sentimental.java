@@ -132,14 +132,16 @@ public class Sentimental {
 					 System.out.println(tweet_counter[i]);
 					 	if(tweet_counter[i] != 0)
 						 {
-							 percent = hate_tweets[i]/tweet_counter[i];
+							 //percent = hate_tweets[i]/tweet_counter[i];
+							 int percentage = (int)(hate_tweets[i] * 100.0 /tweet_counter[i] + 0.5);
+
 						 }
 						 else
 						 {
 							 percent = -1;
 						 }
 						//frequency.write("\t hate tweets:" + Long.toString(hate_tweets[i]) + "\t all tweets:" + Long.toString(tweet_counter[i]) + "\t Prozentual: "+ percent);
-						frequency.write(match_matches(String.valueOf(i)) +"\t hate tweets:" + Long.toString(hate_tweets[i]) + "\t all tweets:" + Long.toString(tweet_counter[i]) + "\t Prozentual: "+ percent);
+						frequency.write(match_matches(String.valueOf(i)) +"\t hate tweets:" + Long.toString(hate_tweets[i]) + "\t all tweets:" + Long.toString(tweet_counter[i]) + "\t Prozentual: "+ percent + "\n");
 					} catch (IOException ioe) {
 						System.out.println("ERROR FFS");
 						ioe.printStackTrace();
