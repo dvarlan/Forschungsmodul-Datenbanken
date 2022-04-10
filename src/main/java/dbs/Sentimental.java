@@ -121,7 +121,7 @@ public class Sentimental {
 		float percent = -1;
 		FileWriter frequency = null;
  	try {
-		frequency = new FileWriter( result_Dir.toString() + "//" + "frequency",true);
+		frequency = new FileWriter( result_Dir.toString() + "//" + "frequency.txt",true);
 	} catch (IOException e1) {
 		e1.printStackTrace();
 	}
@@ -137,8 +137,8 @@ public class Sentimental {
 						 {
 							 percent = -1;
 						 }
-
-						frequency.write(match_matches(String.valueOf(i)) +"\t hate tweets:" + String.valueOf(hate_tweets[i]) + "\t all tweets:" + String.valueOf(tweet_counter[i]) + "\t Prozentual: "+ percent);
+						frequency.write("\t hate tweets:" + hate_tweets[i] + "\t all tweets:" + tweet_counter[i] + "\t Prozentual: "+ percent);
+						frequency.write(match_matches(String.valueOf(i)) +"\t hate tweets:" + hate_tweets[i] + "\t all tweets:" + tweet_counter[i] + "\t Prozentual: "+ percent);
 					} catch (IOException ioe) {
 						System.out.println("ERROR FFS");
 						ioe.printStackTrace();
