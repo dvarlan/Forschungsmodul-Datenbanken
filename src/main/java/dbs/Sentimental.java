@@ -95,7 +95,6 @@ public class Sentimental {
 	Object[] count_array_temp = count_stream.toArray();
 	count_stream.close();
 	Path[] count_array = Arrays.copyOf(count_array_temp, count_array_temp.length, Path[].class);
-	int i = 0;
 	for(Path tweets : count_array)
 	{
 		if(!tweets.equals(split_Dir))
@@ -117,10 +116,10 @@ public class Sentimental {
 	countSession.close();
 	}
 		
-	public static void tweet_percentage();
+	public static void tweet_percentage()
 	{
  	try {
-		frequency = new FileWriter( result_Dir.toString() + "//" + "frequency",true);
+		FileWriter frequency = new FileWriter( result_Dir.toString() + "//" + "frequency",true);
 	} catch (IOException e1) {
 		e1.printStackTrace();
 	}
