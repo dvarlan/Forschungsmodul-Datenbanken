@@ -681,7 +681,7 @@ public class Sentimental {
 											c = c.replace(".txt", "");
 										}
 										a = Integer.parseInt(c);
-							 real_hate[a] == real_hate[a] + 1;
+							 real_hate[a] = real_hate[a] + 1;
 						 } 
 						 catch (Exception e5) 
 						 {
