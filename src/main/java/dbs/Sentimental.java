@@ -79,7 +79,24 @@ public class Sentimental {
 
 	public static void count_all_tweets() 
 	{
-		
+	Stream <Path> split_stream = null;
+	try {
+		count_stream = Files.walk(split_Dir);
+	} catch (IOException e) {
+		e.printStackTrace();
+		System.out.println("counting");
+		System.exit(8);
+	}
+	Object[] count_array_temp = count_stream.toArray();
+	count_stream.close();
+	Path[] count_array = Arrays.copyOf(count_array_temp, count_array_temp.length, Path[].class);
+	int i = 0;
+	for(Path tweets : split_array)
+	{
+		if(!tweets.equals(split_Dir))
+		{
+			
+		}
 	}
 	public static void tweet_percentage();
 	{
