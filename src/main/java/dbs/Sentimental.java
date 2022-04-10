@@ -83,7 +83,7 @@ public class Sentimental {
 	sparkConf.setMaster("local[*]");
 	System.setProperty("illegal-access", "permit");
 	SparkSession countSession = SparkSession.builder().config(sparkConf).getOrCreate();
-	Stream <Path> split_stream = null;
+	Stream <Path> count_stream = null;
 	Dataset<Row> counting;
 	try {
 		count_stream = Files.walk(split_Dir);
