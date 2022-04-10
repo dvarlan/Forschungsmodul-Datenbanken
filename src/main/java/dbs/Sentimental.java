@@ -108,7 +108,7 @@ public class Sentimental {
 			counting.createOrReplaceTempView("games");
 			counting = countSession.sql("Select Spiel, count(*) AS Anzahl from games ORDER BY Spiel ASC Group By Spiel");
 			List<Row> liste = counting.select("Anzahl").collectAsList();
-			for(int i = 0;  i < tweet_counter.length, i++)
+			for(int i = 0;  i < tweet_counter.length; i++)
 				{
 					tweet_counter[i] = tweet_counter[i] + liste.get(i);
 				}
@@ -124,7 +124,7 @@ public class Sentimental {
 	} catch (IOException e1) {
 		e1.printStackTrace();
 	}
-		for(int i = 0; i < hate_tweets.length && i < tweet_counter.length, i++)
+		for(int i = 0; i < hate_tweets.length && i < tweet_counter.length; i++)
 		{
 			frequency.write(match_matches(i.toString()) +"\t hate tweets:" + hate_tweets[i].toString() + "\t all tweets:" + tweet_counter[i].toString() + "\t Prozentual: "+ hate_tweets[i]/tweet_counter[i]);
 		}
@@ -972,7 +972,7 @@ public class Sentimental {
 	
 	
 	 public static String match_matches(String c) {
-		 if(c.contains("txt")
+		 if(c.contains("txt"))
 		    {
 		 	c = c.replace(".txt", "");
 		    }
